@@ -1,0 +1,93 @@
+.inicio-page {
+  min-height: 370px;
+  padding: 90px 80px 70px;
+  background: #ffffff;
+}
+
+.cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+}
+
+.form-card {
+  width: 500px;
+  min-height: 250px;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  padding: 28px 18px 26px;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.25);
+}
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.image-placeholder {
+  width: 150px;
+  height: 90px;
+  border: 1px solid #dddddd;
+  border-radius: 7px;
+  background: #ffffff;
+}
+
+.card-title {
+  flex: 1;
+  color: #65122e;
+  padding-top: 10px;
+}
+
+.card-title h3,
+.card-title p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status {
+  background: #c00000;
+  color: white;
+  font-size: 12px;
+  padding: 8px 18px;
+  border-radius: 20px;
+}
+
+.progress-row {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #65122e;
+  font-size: 11px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 12px;
+  background: #d9d9d9;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #c8c8c8;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: #65122e;
+}
+
+.form-card button {
+  display: block;
+  margin: 42px auto 0;
+  width: 200px;
+  height: 36px;
+  border: none;
+  border-radius: 5px;
+  background: #65122e;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+}

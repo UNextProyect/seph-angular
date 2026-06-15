@@ -5,8 +5,8 @@ import { ApiResponse } from '../../shared/models/apiResponse';
 import { AuthResponse } from '../../shared/models/auth/responses/authResponse';
 import { LoginRequest } from '../../shared/models/auth/requests/loginRequest';
 
-const API_URL = 'https://api-seph.papus.online/api/v1';
-//const API_URL = 'https://localhost:7160/api/v1';
+//const API_URL = 'https://api-seph.papus.online/api/v1';
+const API_URL = 'https://localhost:7160/api/v1';
 
 function getOrCreateDeviceId(): string {
   let deviceId = localStorage.getItem('deviceId');

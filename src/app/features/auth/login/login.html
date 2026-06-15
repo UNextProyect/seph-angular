@@ -1,14 +1,56 @@
-<div>
-  <h2>Iniciar sesión</h2>
+<div class="login-page">
 
-  <input type="email" [(ngModel)]="form.email" placeholder="Correo" />
-  <input type="password" [(ngModel)]="form.password" placeholder="Contraseña" />
+  <section class="login-left">
+    <img
+      class="logo-hidalgo"
+      src="/imagenes/logoHidalgo.svg"
+      alt="Hidalgo Educación">
 
-  <button (click)="login()" [disabled]="loading()">
-    @if (loading()) { Cargando... } @else { Entrar }
-  </button>
+    <div class="dges-box">
+      <img
+        class="logo-dges"
+        src="/imagenes/DGES-Login.svg"
+        alt="DGES">
+    </div>
 
-  @if (error()) {
-    <p>{{ error() }}</p>
-  }
+    <img
+      class="img-letras"
+      src="/imagenes/Group.svg"
+      alt="hidalgo.gob.mx">
+  </section>
+
+  <section class="login-right">
+    <div class="login-card">
+
+      <label>Correo Electrónico</label>
+      <input
+        type="email"
+        [(ngModel)]="form.email">
+
+      <label>Contraseña</label>
+      <input
+        type="password"
+        [(ngModel)]="form.password">
+
+      <button
+        (click)="login()"
+        [disabled]="loading()">
+
+        @if (loading()) {
+          Cargando...
+        } @else {
+          Acceder
+        }
+
+      </button>
+
+      @if (error()) {
+        <p class="error-message">
+          {{ error() }}
+        </p>
+      }
+
+    </div>
+  </section>
+
 </div>
