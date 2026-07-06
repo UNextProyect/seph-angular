@@ -1,0 +1,159 @@
+<div class="create-page">
+
+  <div class="create-header">
+    <div class="create-title">
+      <h2>{{ institucionId ? 'Editar Institución' : 'Registrar Institución' }}</h2>
+      <p>
+        {{ institucionId
+          ? 'Actualiza los datos de la institución'
+          : 'Alta de una nueva institución de educación superior' }}
+      </p>
+    </div>
+
+    <a class="btn-secondary" routerLink="/admin/instituciones">
+      Volver al concentrado
+    </a>
+  </div>
+
+  @if (notificationMessage()) {
+    <div
+      class="notification"
+      [class.success]="notificationType() === 'success'"
+      [class.error]="notificationType() === 'error'">
+      {{ notificationMessage() }}
+    </div>
+  }
+
+  <!-- Estado de carga: solo aplica al editar (se está pidiendo el
+  detalle de la institución al backend). Sin esto el formulario se
+  ve vacío mientras responde la petición y parece que "no cargó nada". -->
+  @if (isLoading()) {
+    <p class="loading">
+      Cargando información de la institución...
+    </p>
+  } @else {
+
+  <form class="form-card" (ngSubmit)="saveInstitucion()">
+
+    <div class="form-grid">
+
+      <div class="field-card wide">
+        <label>Nombre de la institución *</label>
+        <input
+          type="text"
+          name="strNombre"
+          maxlength="250"
+          [(ngModel)]="institucion.strNombre"
+        />
+      </div>
+
+      <div class="field-card">
+        <label>Municipio *</label>
+        <select
+          name="idMunicipio"
+          [(ngModel)]="institucion.idMunicipio">
+
+          <option [ngValue]="0">Seleccione</option>
+
+          @for (municipio of municipios(); track municipio.id) {
+            <option [ngValue]="municipio.id">
+              {{ municipio.strValor }}
+            </option>
+          }
+
+        </select>
+      </div>
+
+      <div class="field-card">
+        <label>Siglas *</label>
+        <input
+          type="text"
+          name="strSiglas"
+          maxlength="50"
+          [(ngModel)]="institucion.strSiglas"
+        />
+      </div>
+
+      <div class="field-card">
+        <label>CCT *</label>
+        <input
+          type="text"
+          name="strCct"
+          maxlength="30"
+          [(ngModel)]="institucion.strCct"
+        />
+      </div>
+
+      <div class="field-card wide">
+        <label>Dirección *</label>
+        <input
+          type="text"
+          name="strDireccion"
+          maxlength="500"
+          [(ngModel)]="institucion.strDireccion"
+        />
+      </div>
+
+      <div class="field-card">
+        <label>Fecha de creación</label>
+        <input
+          type="date"
+          name="dateFechaCreacion"
+          [(ngModel)]="institucion.dateFechaCreacion"
+        />
+      </div>
+
+      <div class="field-card">
+        <label>Decreto de creación</label>
+        <input
+          type="text"
+          name="strDecretoCreacion"
+          maxlength="500"
+          [(ngModel)]="institucion.strDecretoCreacion"
+        />
+      </div>
+
+      <div class="field-card">
+        <label>Sitio web</label>
+        <input
+          type="text"
+          name="strSitioWeb"
+          maxlength="250"
+          [(ngModel)]="institucion.strSitioWeb"
+        />
+      </div>
+
+      <div class="field-card">
+        <label>Correo institucional *</label>
+        <input
+          type="email"
+          name="strCorreoInstitucional"
+          maxlength="250"
+          [(ngModel)]="institucion.strCorreoInstitucional"
+        />
+      </div>
+
+      <div class="field-card">
+        <label>Teléfono institucional</label>
+        <input
+          type="text"
+          name="strTelefonoInstitucional"
+          maxlength="20"
+          [(ngModel)]="institucion.strTelefonoInstitucional"
+        />
+      </div>
+
+    </div>
+
+    <button
+      class="btn-primary"
+      type="submit"
+      [disabled]="isSaving()">
+      {{ isSaving() ? 'Guardando...' : (institucionId ? 'Guardar Cambios' : 'Registrar Institución') }}
+    </button>
+
+  </form>
+
+  }
+
+</div>

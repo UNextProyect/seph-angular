@@ -1,0 +1,240 @@
+<!-- Concentrado de Instituciones de Educación Superior.
+Lista las instituciones registradas en el sistema. -->
+<div class="summary-page">
+
+  <!-- Encabezado: título del concentrado y acciones. -->
+  <div class="summary-header">
+
+    <div class="summary-title">
+      <h2>Registro de Instituciones de Educación Superior</h2>
+      <p>Concentrado de las instituciones registradas</p>
+    </div>
+
+    <div class="summary-actions">
+
+      <a
+        class="btn-secondary"
+        routerLink="/admin">
+        Inicio
+      </a>
+
+      <!-- Inicia el flujo de captura de una nueva institución. -->
+      <a
+        class="btn-primary"
+        routerLink="/admin/instituciones/nueva">
+        + Nueva Institución
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- Aviso de error al cargar. -->
+  @if (notificationMessage()) {
+    <div
+      class="notification"
+      [class.success]="notificationType() === 'success'"
+      [class.error]="notificationType() === 'error'">
+
+      {{ notificationMessage() }}
+
+    </div>
+  }
+
+  <!-- Estado de carga. -->
+  @if (isLoading()) {
+    <p class="loading">
+      Cargando instituciones...
+    </p>
+  }
+
+  <!-- Mensaje cuando aún no hay instituciones registradas. -->
+  @if (!isLoading() && registros().length === 0) {
+    <div class="empty-state">
+      <p>Aún no hay instituciones registradas.</p>
+    </div>
+  }
+
+  <!-- Tabla del concentrado. -->
+  @if (!isLoading() && registros().length > 0) {
+    <div class="table-card">
+
+      <table class="records-table">
+
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Siglas</th>
+            <th>CCT</th>
+            <th>Correo institucional</th>
+            <th>Teléfono</th>
+            <th>Sitio web</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (registro of registros(); track registro.id) {
+            <tr>
+
+              <td>{{ registro.strNombre }}</td>
+
+              <td>{{ registro.strSiglas ?? '—' }}</td>
+
+              <td>{{ registro.strCct ?? '—' }}</td>
+
+              <td>{{ registro.strCorreoInstitucional ?? '—' }}</td>
+
+              <td>{{ registro.strTelefonoInstitucional ?? '—' }}</td>
+
+              <td>
+                @if (registro.strSitioWeb) {
+                  <a
+                    class="table-link"
+                    [href]="registro.strSitioWeb"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    {{ registro.strSitioWeb }}
+                  </a>
+                } @else {
+                  —
+                }
+              </td>
+
+              <td>
+                <span
+                  class="badge"
+                  [class.badge-complete]="registro.bitActivo"
+                  [class.badge-incomplete]="!registro.bitActivo">
+
+                  {{ registro.bitActivo ? 'Activa' : 'Inactiva' }}
+
+                </span>
+              </td>
+
+              <td class="actions-cell">
+                <button
+                  type="button"
+                  class="btn-detalle"
+                  (click)="openDetalle(registro)">
+                  Detalle
+                </button>
+
+                <a
+                  class="btn-editar"
+                  [routerLink]="['/admin/instituciones', registro.id, 'editar']">
+                  Editar
+                </a>
+
+                @if (registro.bitActivo) {
+                  <button
+                    type="button"
+                    class="btn-desactivar"
+                    (click)="desactivar(registro)">
+                    Desactivar
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    class="btn-reactivar"
+                    (click)="reactivar(registro)">
+                    Reactivar
+                  </button>
+                }
+              </td>
+
+            </tr>
+          }
+        </tbody>
+
+      </table>
+
+    </div>
+  }
+
+  <!-- Modal de Detalle: información completa de la institución seleccionada. -->
+  @if (selectedRegistro(); as registro) {
+    <div class="modal-overlay" (click)="closeDetalle()">
+
+      <div class="modal-card" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+          <h3>Detalle de la institución</h3>
+
+          <button type="button" class="btn-close" (click)="closeDetalle()">
+            ✕
+          </button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="detail-row">
+            <span class="detail-label">Nombre</span>
+            <span class="detail-value">{{ registro.strNombre }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Siglas</span>
+            <span class="detail-value">{{ registro.strSiglas ?? '—' }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">CCT</span>
+            <span class="detail-value">{{ registro.strCct ?? '—' }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Dirección</span>
+            <span class="detail-value">{{ registro.strDireccion ?? '—' }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Fecha de creación</span>
+            <span class="detail-value">
+              {{ registro.dateFechaCreacion
+                ? (registro.dateFechaCreacion | date: 'dd/MM/yyyy')
+                : '—' }}
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Decreto de creación</span>
+            <span class="detail-value">{{ registro.strDecretoCreacion ?? '—' }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Sitio web</span>
+            <span class="detail-value">{{ registro.strSitioWeb ?? '—' }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Correo institucional</span>
+            <span class="detail-value">{{ registro.strCorreoInstitucional ?? '—' }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Teléfono institucional</span>
+            <span class="detail-value">{{ registro.strTelefonoInstitucional ?? '—' }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Estado</span>
+            <span class="detail-value">
+              <span
+                class="badge"
+                [class.badge-complete]="registro.bitActivo"
+                [class.badge-incomplete]="!registro.bitActivo">
+                {{ registro.bitActivo ? 'Activa' : 'Inactiva' }}
+              </span>
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  }
+
+</div>

@@ -1,7 +1,7 @@
 import { HttpInterceptorFn, HttpErrorResponse, HttpRequest, HttpHandlerFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, switchMap, filter, take, throwError, BehaviorSubject } from 'rxjs';
-import { AuthService } from '../auth/authService';
+import { AuthService } from '../services/auth/authService';
 
 // Estado compartido para evitar múltiples refresh simultáneos
 let isRefreshing = false;

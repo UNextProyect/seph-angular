@@ -122,9 +122,10 @@ y permite iniciar un nuevo registro. -->
           </td>
 
           <!-- Acciones. Si el registro está incompleto (falta el
-          historial de contrato) se ofrece continuarlo: lleva al paso 2
-          con el empleado ya guardado (?empleado=ID). -->
-          <td>
+          historial de contrato) se ofrece continuarlo: lleva al paso
+          que se quedó sin completar, con el empleado ya guardado
+          (?empleado=ID). "Detalle" siempre está disponible. -->
+          <td class="actions-cell">
             <a
               *ngIf="!registro.bitContratoCompleto"
               class="btn-continue"
@@ -133,17 +134,115 @@ y permite iniciar un nuevo registro. -->
               Continuar
             </a>
 
-            <span
-              *ngIf="registro.bitContratoCompleto"
-              class="action-done">
-              —
-            </span>
+            <button
+              type="button"
+              class="btn-detalle"
+              (click)="openDetalle(registro)">
+              Detalle
+            </button>
           </td>
 
         </tr>
       </tbody>
 
     </table>
+
+  </div>
+
+  <!-- Modal de Detalle: información completa del registro seleccionado. -->
+  <div
+    class="modal-overlay"
+    *ngIf="selectedRegistro() as registro"
+    (click)="closeDetalle()">
+
+    <div
+      class="modal-card"
+      (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3>Detalle del registro</h3>
+
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeDetalle()">
+          ✕
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="detail-row">
+          <span class="detail-label">Nombre completo</span>
+          <span class="detail-value">{{ fullName(registro) }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">CURP</span>
+          <span class="detail-value">{{ registro.strCurp }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Sexo</span>
+          <span class="detail-value">{{ registro.strSexo }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Perfil(es) académico(s)</span>
+          <span class="detail-value">{{ perfilesAcademicosTexto(registro) }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">SNI/SNII</span>
+          <span class="detail-value">{{ registro.strSNII ?? '—' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Institución</span>
+          <span class="detail-value">{{ registro.strInstitucion ?? '—' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Tipo de personal</span>
+          <span class="detail-value">{{ registro.strTipoPersonal ?? '—' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Tipo de contrato</span>
+          <span class="detail-value">{{ registro.strTipoContrato ?? '—' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Área</span>
+          <span class="detail-value">{{ registro.strArea ?? '—' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Fecha de ingreso</span>
+          <span class="detail-value">
+            {{ registro.dateFechaIngreso
+              ? (registro.dateFechaIngreso | date: 'dd/MM/yyyy')
+              : '—' }}
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Estado</span>
+          <span class="detail-value">
+            <span
+              class="badge"
+              [class.badge-complete]="registro.bitContratoCompleto"
+              [class.badge-incomplete]="!registro.bitContratoCompleto">
+
+              {{ registro.bitContratoCompleto ? 'Completo' : 'Incompleto' }}
+
+            </span>
+          </span>
+        </div>
+
+      </div>
+
+    </div>
 
   </div>
 

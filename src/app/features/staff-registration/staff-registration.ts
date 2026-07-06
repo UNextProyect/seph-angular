@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { PersonalInformationComponent } from './personal-information/personal-information';
 import { ContractHistoryComponent } from './contract-history/contract-history';
+import { StaffRegistrationService } from '../../core/services/staff-registration/staff-registration.service';
 
 @Component({
   selector: 'app-staff-registration',
@@ -27,6 +28,7 @@ export class StaffRegistrationComponent implements OnInit {
 
   private cdr = inject(ChangeDetectorRef);
   private route = inject(ActivatedRoute);
+  private staffRegistrationService = inject(StaffRegistrationService);
 
   menuCollapsed = false;
   currentStep = 1;
@@ -34,20 +36,64 @@ export class StaffRegistrationComponent implements OnInit {
   employeeId: number | null = null;
   isSaving = false;
 
+  /* true mientras se resuelve a qué paso/sub-pantalla mandar
+  al usuario al retomar un registro (?empleado=ID). Ningún paso
+  se muestra hasta resolverlo: si se dejara el valor por defecto
+  de currentStep, Información Personal se crearía de inmediato
+  con initialSubStep aún en 'basico' y, al no volver a destruirse,
+  nunca tomaría en cuenta el valor correcto una vez resuelto. */
+  resolvingResume = false;
+
+  /* Sub-pantalla en la que debe iniciar Información Personal
+  al mostrarse (solo aplica si currentStep === 1). */
+  personalInfoInitialSubStep: 'basico' | 'academico' = 'basico';
+
   notificationMessage = '';
   notificationType: 'success' | 'error' = 'success';
 
-  /* Permite retomar un registro incompleto desde el concentrado:
-  al llegar con ?empleado=ID se salta directo al paso 2
-  (Historial de Contrato) usando el empleado ya guardado. */
+  /* Permite retomar un registro incompleto desde el concentrado
+  (?empleado=ID). Consulta el empleado para saber en qué paso
+  se quedó: si los datos académicos no están completos, se queda
+  en el paso 1 (pantalla de perfil académico/SNI); si ya están
+  completos, avanza al paso 2 (Historial de Contrato). */
   ngOnInit(): void {
     const empleadoParam = this.route.snapshot.queryParamMap.get('empleado');
 
-    if (empleadoParam) {
-      this.employeeId = Number(empleadoParam);
-      this.personalInformationCompleted = true;
-      this.currentStep = 2;
+    if (!empleadoParam) {
+      return;
     }
+
+    const id = Number(empleadoParam);
+    this.employeeId = id;
+    this.resolvingResume = true;
+
+    this.staffRegistrationService.getEmpleadoById(id).subscribe({
+      next: (response) => {
+        const datosAcademicosCompletos = response.data?.bitDatosAcademicosCompletos ?? true;
+
+        this.personalInformationCompleted = datosAcademicosCompletos;
+
+        if (datosAcademicosCompletos) {
+          this.currentStep = 2;
+        } else {
+          this.currentStep = 1;
+          this.personalInfoInitialSubStep = 'academico';
+        }
+
+        this.resolvingResume = false;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error consultando el empleado a retomar:', error);
+
+        // Ante un error, se conserva el comportamiento anterior
+        // (avanzar directo a Historial de Contrato).
+        this.personalInformationCompleted = true;
+        this.currentStep = 2;
+        this.resolvingResume = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   toggleMenu(): void {
@@ -89,12 +135,16 @@ export class StaffRegistrationComponent implements OnInit {
 
   previousStep(): void {
     if (this.currentStep === 2) {
+      // Al regresar, Información Personal siempre inicia en la
+      // pantalla básica (con los datos ya guardados poblados).
+      this.personalInfoInitialSubStep = 'basico';
       this.currentStep = 1;
     }
   }
 
   goToStep(step: number): void {
     if (step === 1) {
+      this.personalInfoInitialSubStep = 'basico';
       this.currentStep = 1;
       return;
     }

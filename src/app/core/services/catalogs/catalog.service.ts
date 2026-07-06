@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 
 import { ApiResponse } from '../../../shared/models/apiResponse';
 import { SexResponse } from '../../../shared/models/catalogs/responses/sexResponse';
+import { PerfilAcademicoResponse } from '../../../shared/models/catalogs/responses/perfilAcademicoResponse';
+import { MunicipioResponse } from '../../../shared/models/catalogs/responses/municipioResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +36,18 @@ export class CatalogService {
   getAreas(): Observable<ApiResponse<any[]>> {
     return this.http.get<ApiResponse<any[]>>(
       `${this.apiUrl}/areas`
+    );
+  }
+
+  getPerfilesAcademicos(): Observable<ApiResponse<PerfilAcademicoResponse[]>> {
+    return this.http.get<ApiResponse<PerfilAcademicoResponse[]>>(
+      `${this.apiUrl}/perfiles-academicos`
+    );
+  }
+
+  getMunicipios(): Observable<ApiResponse<MunicipioResponse[]>> {
+    return this.http.get<ApiResponse<MunicipioResponse[]>>(
+      `${this.apiUrl}/municipios`
     );
   }
 }

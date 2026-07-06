@@ -3,10 +3,10 @@
 
   <div
     class="notification"
-    [class.success]="notificationType === 'success'"
-    [class.error]="notificationType === 'error'"
-    *ngIf="notificationMessage">
-    {{ notificationMessage }}
+    [class.success]="notificationType() === 'success'"
+    [class.error]="notificationType() === 'error'"
+    *ngIf="notificationMessage()">
+    {{ notificationMessage() }}
   </div>
 
   <div class="form-content">
@@ -19,7 +19,7 @@
   [(ngModel)]="contract.idInstitucion"
   name="idInstitucion">
   <option [ngValue]="contract.idInstitucion">
-    {{ institutionName }}
+    {{ institutionName() }}
   </option>
 </select>
       </div>
@@ -33,7 +33,7 @@
   <option [ngValue]="0"></option>
 
   <option
-    *ngFor="let item of tiposPersonal"
+    *ngFor="let item of tiposPersonal()"
     [ngValue]="item.id">
 
     {{ item.strValor || item.strDescripcion || item.nombre || item.descripcion || item.id }}
@@ -49,7 +49,7 @@
   <option [ngValue]="0"></option>
 
   <option
-    *ngFor="let item of tiposContrato"
+    *ngFor="let item of tiposContrato()"
     [ngValue]="item.id">
 
     {{ item.strValor || item.strDescripcion || item.nombre || item.descripcion || item.id }}
@@ -93,7 +93,7 @@
   <option [ngValue]="0"></option>
 
   <option
-    *ngFor="let item of areas"
+    *ngFor="let item of areas()"
     [ngValue]="item.id">
 
     {{ item.strValor || item.strDescripcion || item.nombre || item.descripcion || item.id }}

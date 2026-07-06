@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../../../core/auth/authService';
+import { AuthService } from '../../../core/services/auth/authService';
 import { CatalogService } from '../../../core/services/catalogs/catalog.service';
-import { StaffRegistrationService } from '../staff-registration.service';
+import { InstitutionsService } from '../../../core/services/institutions/institutions-service';
+import { StaffRegistrationService } from '../../../core/services/staff-registration/staff-registration.service';
 import { CreateHistorialContratoRequest } from '../../../shared/models/staff-registration/requests/createHistorialContratoRequest';
 
 @Component({
@@ -22,21 +23,25 @@ export class ContractHistoryComponent implements OnInit {
   private catalogService = inject(CatalogService);
   private authService = inject(AuthService);
   private staffRegistrationService = inject(StaffRegistrationService);
+  private readonly institutionsService = inject(InstitutionsService);
   private router = inject(Router);
 
-  tiposPersonal: any[] = [];
-  tiposContrato: any[] = [];
-  areas: any[] = [];
+  /* La app es zoneless: los valores que se actualizan dentro de
+  subscribe()/setTimeout() deben ser signals para que la vista
+  se refresque sola (sin necesitar un clic adicional). */
 
-  institutions: any[] = [];
-  institutionName = '';
+  tiposPersonal = signal<any[]>([]);
+  tiposContrato = signal<any[]>([]);
+  areas = signal<any[]>([]);
+
+  institutionName = signal('');
 
   maxDate = new Date().toISOString().split('T')[0];
 
-  notificationMessage = '';
-  notificationType: 'success' | 'error' = 'success';
+  notificationMessage = signal('');
+  notificationType = signal<'success' | 'error'>('success');
 
-  isSaving = false;
+  isSaving = signal(false);
 
   contract: CreateHistorialContratoRequest = {
     id: 0,
@@ -63,28 +68,24 @@ export class ContractHistoryComponent implements OnInit {
     const currentUser = this.authService.currentUser();
 
     if (!currentUser?.idInstitucion) {
-      this.institutionName = 'Usuario sin institución asignada';
+      this.institutionName.set('Usuario sin institución asignada');
       return;
     }
 
     this.contract.idInstitucion = currentUser.idInstitucion;
 
-    this.staffRegistrationService.getInstitutions().subscribe({
-      next: (response: any) => {
-        this.institutions = response.data ?? response.Data ?? response ?? [];
-
-        const institution = this.institutions.find(
+    this.institutionsService.getInstitutions().subscribe({
+      next: (response) => {
+        const institution = (response.data ?? []).find(
           item => item.id === currentUser.idInstitucion
         );
 
-        this.institutionName =
-          institution?.strNombre ??
-          institution?.strValor ??
-          institution?.nombre ??
-          'Institución asignada automáticamente';
+        this.institutionName.set(
+          institution?.strNombre ?? 'Institución asignada automáticamente'
+        );
       },
       error: () => {
-        this.institutionName = 'No fue posible cargar la institución';
+        this.institutionName.set('No fue posible cargar la institución');
       }
     });
   }
@@ -92,25 +93,25 @@ export class ContractHistoryComponent implements OnInit {
   loadCatalogs(): void {
     this.catalogService.getTiposPersonal().subscribe({
       next: (response: any) => {
-        this.tiposPersonal = response.data ?? response.Data ?? response ?? [];
+        this.tiposPersonal.set(response.data ?? response.Data ?? response ?? []);
       }
     });
 
     this.catalogService.getTiposContrato().subscribe({
       next: (response: any) => {
-        this.tiposContrato = response.data ?? response.Data ?? response ?? [];
+        this.tiposContrato.set(response.data ?? response.Data ?? response ?? []);
       }
     });
 
     this.catalogService.getAreas().subscribe({
       next: (response: any) => {
-        this.areas = response.data ?? response.Data ?? response ?? [];
+        this.areas.set(response.data ?? response.Data ?? response ?? []);
       }
     });
   }
 
   saveContractHistory(): void {
-    if (this.isSaving) {
+    if (this.isSaving()) {
       return;
     }
 
@@ -138,7 +139,7 @@ export class ContractHistoryComponent implements OnInit {
       return;
     }
 
-    this.isSaving = true;
+    this.isSaving.set(true);
 
     this.contract.idInstitucion = currentUser.idInstitucion;
     this.contract.idEmpleado = this.employeeId!;
@@ -159,7 +160,7 @@ export class ContractHistoryComponent implements OnInit {
               'error'
             );
 
-            this.isSaving = false;
+            this.isSaving.set(false);
             return;
           }
 
@@ -169,7 +170,7 @@ export class ContractHistoryComponent implements OnInit {
           );
 
           setTimeout(() => {
-            this.isSaving = false;
+            this.isSaving.set(false);
             /* Al concluir el registro se regresa al concentrado
             para que el usuario vea su registro recién capturado. */
             this.router.navigateByUrl('/staff-registration');
@@ -183,7 +184,7 @@ export class ContractHistoryComponent implements OnInit {
             'error'
           );
 
-          this.isSaving = false;
+          this.isSaving.set(false);
         }
       });
   }
@@ -279,11 +280,11 @@ export class ContractHistoryComponent implements OnInit {
     message: string,
     type: 'success' | 'error'
   ): void {
-    this.notificationMessage = message;
-    this.notificationType = type;
+    this.notificationMessage.set(message);
+    this.notificationType.set(type);
 
     setTimeout(() => {
-      this.notificationMessage = '';
+      this.notificationMessage.set('');
     }, 4000);
   }
 }

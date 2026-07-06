@@ -89,7 +89,7 @@
 }
 
 .empty-state p {
-  margin: 0 0 22px;
+  margin: 0;
   font-size: 13px;
   color: #65122e;
 }
@@ -130,6 +130,11 @@
   background: #faf5f7;
 }
 
+.table-link {
+  color: #65122e;
+  text-decoration: underline;
+}
+
 .badge {
   display: inline-block;
   padding: 4px 12px;
@@ -147,39 +152,42 @@
   background: #c00000;
 }
 
-.btn-continue {
-  display: inline-block;
-  padding: 5px 14px;
-  border-radius: 5px;
-  background: #65122e;
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 600;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.action-done {
-  color: #999999;
-}
-
 .actions-cell {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.btn-detalle {
+.btn-detalle,
+.btn-editar,
+.btn-desactivar,
+.btn-reactivar {
   display: inline-block;
   padding: 5px 14px;
   border-radius: 5px;
-  background: #ffffff;
-  color: #65122e;
-  border: 1px solid #65122e;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  text-decoration: none;
+  border: none;
+}
+
+.btn-detalle,
+.btn-editar {
+  background: #ffffff;
+  color: #65122e;
+  border: 1px solid #65122e;
+}
+
+.btn-desactivar {
+  background: #c00000;
+  color: #ffffff;
+}
+
+.btn-reactivar {
+  background: #23b64b;
+  color: #ffffff;
 }
 
 .modal-overlay {

@@ -1,52 +1,37 @@
 <!--
   Notificación visual del formulario.
-
-  Se muestra únicamente cuando existe
-  un mensaje en notificationMessage.
-
-  Las clases success y error cambian
-  según el tipo de respuesta obtenida.
 -->
 <div
   class="notification"
-  [class.success]="notificationType === 'success'"
-  [class.error]="notificationType === 'error'"
-  *ngIf="notificationMessage">
+  [class.success]="notificationType() === 'success'"
+  [class.error]="notificationType() === 'error'"
+  *ngIf="notificationMessage()">
 
-  {{ notificationMessage }}
+  {{ notificationMessage() }}
 
 </div>
 
 <!--
-  Formulario encargado de capturar
-  la información personal del empleado.
+  Pantalla 1: Datos básicos del empleado
+  (Nombre, apellidos, CURP, sexo).
 
-  La información capturada se almacena
-  temporalmente en employee.
-
-  Posteriormente será enviada
-  al backend mediante saveEmployee().
+  Al guardar, se crea el Empleado y se pasa
+  a la pantalla 2 (perfil académico / SNI),
+  sin avanzar todavía el paso del wizard.
 -->
-<form class="form-card">
+<form class="form-card" *ngIf="subStep() === 'basico'">
   <h2>Datos Personales</h2>
 
   <div class="form-content">
 
     <div class="form-grid personal-grid">
 
-      <!--
-        Tarjeta izquierda del formulario.
-
-        Contiene los datos principales:
-        - Nombre
-        - Apellido materno
-        - Apellido paterno
-      -->
       <div class="field-card large">
         <label>Nombres (s)</label>
         <input
           type="text"
           name="strNombre"
+          maxlength="250"
           [(ngModel)]="employee.strNombre"
         />
 
@@ -54,6 +39,7 @@
         <input
           type="text"
           name="strApellidoMat"
+          maxlength="250"
           [(ngModel)]="employee.strApellidoMat"
         />
 
@@ -61,61 +47,33 @@
         <input
           type="text"
           name="strApellidoPat"
+          maxlength="250"
           [(ngModel)]="employee.strApellidoPat"
         />
       </div>
 
-      <!--
-        Columna derecha del formulario.
-
-        Contiene:
-        - CURP
-        - Sexo
-      -->
       <div class="right-column">
 
-        <!--
-          Campo CURP.
-
-          Este dato se enviará al backend,
-          donde se valida que no exista
-          otro empleado con la misma CURP.
-        -->
-        <div class="field-card">
+        <div class="field-card curp">
           <label>CURP</label>
           <input
             type="text"
             name="strCurp"
+            maxlength="18"
             [(ngModel)]="employee.strCurp"
           />
         </div>
 
-        <!--
-          Select dinámico de Sexo.
-
-          Obtiene las opciones desde
-          CatalogService mediante el arreglo sexes.
-        -->
-        <div class="field-card">
+        <div class="field-card sexo">
           <label>Sexo</label>
 
           <select
             name="idSexo"
             [(ngModel)]="employee.idSexo">
 
-            <!--
-              Valor inicial del select.
-            -->
             <option [ngValue]="0">Seleccione</option>
 
-            <!--
-              Recorre el catálogo de sexos
-              recibido desde el backend.
-
-              track sex.id ayuda a Angular
-              a optimizar el renderizado.
-            -->
-            @for (sex of sexes; track sex.id) {
+            @for (sex of sexes(); track sex.id) {
               <option [ngValue]="sex.id">
                 {{ sex.strValor }}
               </option>
@@ -124,6 +82,153 @@
           </select>
         </div>
 
+      </div>
+
+    </div>
+
+  </div>
+</form>
+
+<!--
+  Pantalla 2: Perfil académico y SNI/SNII.
+
+  Se muestra después de guardar los datos básicos,
+  para el empleado recién creado (employeeIdCreado).
+-->
+<form class="form-card" *ngIf="subStep() === 'academico'">
+  <h2>Datos Personales</h2>
+
+  <div class="form-content">
+
+    <div class="form-grid academico-grid">
+
+      <!--
+        Perfil académico.
+
+        Primero se pregunta si el empleado tiene
+        perfil académico (Sí/No). Si la respuesta
+        es "Sí", se habilita el dropdown para
+        seleccionar uno o varios programas educativos,
+        que se van agregando a una lista y se
+        pueden quitar de forma individual.
+      -->
+      <div class="field-card perfil">
+        <label>¿Tiene perfil académico?</label>
+
+        <div class="radio-group">
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="tienePerfilAcademico"
+              value="SI"
+              [(ngModel)]="tienePerfilAcademico"
+            />
+            Sí
+          </label>
+
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="tienePerfilAcademico"
+              value="NO"
+              [(ngModel)]="tienePerfilAcademico"
+            />
+            No
+          </label>
+        </div>
+
+        <div *ngIf="tienePerfilAcademico === 'SI'">
+
+          <label>
+            Perfil académico (programas educativos en los que participa o imparte clases)
+          </label>
+
+          <div class="inline-field">
+            <select
+              name="perfilAcademicoSeleccionado"
+              [(ngModel)]="perfilAcademicoSeleccionado">
+
+              <option [ngValue]="null">Seleccione</option>
+
+              @for (perfil of perfilesAcademicos(); track perfil.id) {
+                <option [ngValue]="perfil.id">
+                  {{ perfil.strValor }}
+                </option>
+              }
+
+            </select>
+
+            <button
+              type="button"
+              class="btn-agregar"
+              (click)="agregarPerfilAcademico()">
+              Agregar
+            </button>
+          </div>
+
+          <label>Perfiles académicos agregados</label>
+
+          <div class="added-list">
+            <p *ngIf="perfilesAgregados.length === 0" class="empty-hint">
+              Aún no has agregado ningún perfil académico.
+            </p>
+
+            <div class="added-item" *ngFor="let perfil of perfilesAgregados">
+              <span>{{ perfil.strValor }}</span>
+
+              <button
+                type="button"
+                class="btn-quitar"
+                (click)="quitarPerfilAcademico(perfil.id)">
+                ✕
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!--
+        SNI/SNII.
+
+        El radio solo indica si aplica o no.
+        Si es "Sí", se habilita el campo de texto
+        donde se captura el SNI/SNII; si es "No",
+        el valor se guarda como nulo.
+      -->
+      <div class="field-card sni">
+        <label>SNI/SNII, en caso de aplicar.</label>
+
+        <div class="radio-group">
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="tieneSNII"
+              value="SI"
+              [(ngModel)]="tieneSNII"
+            />
+            Sí
+          </label>
+
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="tieneSNII"
+              value="NO"
+              [(ngModel)]="tieneSNII"
+            />
+            No
+          </label>
+        </div>
+
+        <input
+          type="text"
+          name="snii"
+          placeholder="Nivel o folio del SNI/SNII"
+          maxlength="12"
+          [disabled]="tieneSNII !== 'SI'"
+          [(ngModel)]="snii"
+        />
       </div>
 
     </div>

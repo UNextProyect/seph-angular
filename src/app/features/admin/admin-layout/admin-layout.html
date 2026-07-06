@@ -1,0 +1,36 @@
+<div class="admin-page">
+
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar__dges-area">
+      <div class="admin-sidebar__dges-wrap">
+        <img class="admin-sidebar__dges" src="imagenes/DGES-Login.svg" alt="DGES - Dirección General de Educación Superior" />
+      </div>
+    </div>
+
+    <img class="admin-sidebar__wordmark" src="imagenes/Group.svg" alt="hidalgo.gob.mx" />
+  </aside>
+
+  <div class="admin-body">
+
+    <header class="admin-header">
+      <img class="admin-header__logo" src="imagenes/logoHidalgo.svg" alt="Hidalgo - Educación - Secretaría de Educación Pública" />
+      <nav class="admin-header__right">
+      <a routerLink="/home" routerLinkActive="active">Inicio</a>
+       @if (isAuthenticated()) {
+        <button
+          type="button"
+          class="admin-header__logout"
+          (click)="logout()">
+          Cerrar sesión
+        </button>
+      }
+       </nav>
+    </header>
+
+    <main class="admin-content">
+      <router-outlet />
+    </main>
+
+  </div>
+
+</div>

@@ -9,23 +9,26 @@
     <span>Secretaría de Educación Pública</span>
   </div>
   <div class="header-main__right">
-<nav class="header-main__nav">
-  <a href="#">Inicio</a>
-  
+    <nav class="header-main__nav">
+      <a routerLink="/home" routerLinkActive="active">Inicio</a>
 
-  @if (authService.isAuthenticated()) {
-    <button
-      type="button"
-      class="header-main__logout"
-      (click)="logout()">
-      Cerrar sesión
-    </button>
-  }
+      @if (isSuperAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active">Administrativo</a>
+      }
 
-  <button class="header-main__search" aria-label="Buscar">
-    🔍
-  </button>
-</nav>
+      @if (isAuthenticated()) {
+        <button
+          type="button"
+          class="header-main__logout"
+          (click)="logout()">
+          Cerrar sesión
+        </button>
+      }
+
+      <button class="header-main__search" aria-label="Buscar">
+        🔍
+      </button>
+    </nav>
     <div class="header-main__brand">
       <img src="imagenes/DGES-Header-Top.svg" alt="DGES" class="header-main__brand-logo" />
     </div>

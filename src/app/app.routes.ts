@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/authGuard';
+import { superAdminGuard } from './core/guards/superAdminGuard'
 import { LayoutComponent } from './shared/ui/layout/layout';
+import { AdminLayoutComponent } from './features/admin/admin-layout/admin-layout';
 
 export const routes: Routes = [
   {
@@ -28,6 +30,28 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/staff-registration/staffRegistrationRoutes')
             .then(m => m.staffRegistrationRoutes)
+      }
+    ]
+  },
+  {
+    // Fuera de LayoutComponent: esta sección trae su propio
+    // encabezado y sidebar (no el header/nav compartido). Mismo
+    // patrón que LayoutComponent arriba: AdminLayoutComponent pone
+    // el shell (sidebar + header) y las pantallas de admin se
+    // cargan dentro de su <router-outlet>.
+    path: 'admin',
+    component: AdminLayoutComponent,
+    canActivate: [authGuard, superAdminGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/admin/manager/managerRoutes').then(m => m.managerRoutes)
+      },
+      {
+        path: 'instituciones',
+        loadChildren: () =>
+          import('./features/admin/institutions/institutionsRoutes').then(m => m.institutionsRoutes)
       }
     ]
   },

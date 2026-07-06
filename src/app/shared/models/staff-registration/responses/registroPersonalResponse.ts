@@ -13,7 +13,10 @@ export interface RegistroPersonalResponse {
   strSexo: string;
   dateTimeFechaRegistro: string;
   bitActivo: boolean;
+  bitDatosAcademicosCompletos: boolean;
   bitContratoCompleto: boolean;
+  strSNII: string | null;
+  perfilesAcademicos: string[];
   strInstitucion: string | null;
   strTipoPersonal: string | null;
   strTipoContrato: string | null;

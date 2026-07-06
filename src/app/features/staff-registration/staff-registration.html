@@ -176,16 +176,26 @@ Organiza la vista en: Menú lateral - Contenido del formulario -->
 
       </div>
 
-      <!-- Paso 1. Captura la información personal. -->
+      <!-- Mientras se resuelve a qué paso mandar al retomar un
+      registro (?empleado=ID), no se muestra ningún paso todavía. -->
+      <p class="loading-resume" *ngIf="resolvingResume">
+        Cargando información del registro...
+      </p>
+
+      <!-- Paso 1. Captura la información personal.
+      Recibe el id del empleado (si se está retomando un registro)
+      y la sub-pantalla en la que debe iniciar. -->
       <app-personal-information
-        *ngIf="currentStep === 1">
+        *ngIf="currentStep === 1 && !resolvingResume"
+        [employeeId]="employeeId"
+        [initialSubStep]="personalInfoInitialSubStep">
       </app-personal-information>
 
       <!-- Paso 2. Captura el historial de contrato.
       Recibe el id del empleado registrado en el paso 1. -->
       <app-contract-history
         #contractHistoryComponent
-        *ngIf="currentStep === 2"
+        *ngIf="currentStep === 2 && !resolvingResume"
         [employeeId]="employeeId">
       </app-contract-history>
 
