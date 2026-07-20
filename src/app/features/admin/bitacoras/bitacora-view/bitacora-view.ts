@@ -23,7 +23,9 @@ export class BitacoraViewComponent implements OnInit {
   private static readonly NOMBRES_MODULO: Record<string, string> = {
     Institucion: 'Instituciones',
     EnlaceAcademico: 'Enlaces Académicos',
-    Empleado: 'Empleados'
+    Empleado: 'Empleados',
+    Matricula: 'Matriculas',
+    Infraestructura: 'Infraestructuras'
   };
 
   modulo = signal('');

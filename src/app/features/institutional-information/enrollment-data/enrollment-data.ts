@@ -11,10 +11,10 @@ import { AuthService }
 import { InstitutionalInformationService }
   from '../../../core/services/institutional-information/institutional-information.service';
 import { CreateReporteMatriculaRequest }
-  from '../../../shared/models/institutional-information/requests/createReporteMatriculaRequest';
+  from '../../../shared/models/institutional-information/enrollment/requests/createReporteMatriculaRequest';
 import { finalize } from 'rxjs';
 import { UpdateReporteMatriculaRequest }
-  from '../../../shared/models/institutional-information/requests/updateReporteMatriculaRequest';
+  from '../../../shared/models/institutional-information/enrollment/requests/updateReporteMatriculaRequest';
 
   @Component({
   selector: 'app-enrollment-data',

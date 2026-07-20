@@ -1,0 +1,568 @@
+<!-- Contenedor principal del reporte de personal. -->
+<section class="personal-section">
+
+  <!-- Mensajes de éxito y validación del formulario. -->
+  <div
+    class="save-message"
+    [class.success]="saveMessageType === 'success'"
+    [class.error]="saveMessageType === 'error'"
+    *ngIf="saveMessage">
+
+    {{ saveMessage }}
+
+  </div>
+
+  <!-- Encabezado de la sección. -->
+  <div class="section-header">
+
+    <div>
+
+      <h2>
+        Datos del Personal
+      </h2>
+
+      <p>
+        Captura la información del personal y revisa
+        una vista previa antes de guardar.
+      </p>
+
+    </div>
+
+    <!-- Cambia entre captura y vista previa. -->
+    <div class="view-actions">
+
+      <button
+        type="button"
+        [class.active]="activeView === 'capture'"
+        (click)="showCapture()">
+
+        Captura
+
+      </button>
+
+      <button
+        type="button"
+        [class.active]="activeView === 'preview'"
+        (click)="showPreview()">
+
+        Vista previa
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Acciones disponibles cuando ya existe un reporte. -->
+  <div
+    class="edit-actions"
+    *ngIf="reportSaved">
+
+    <button
+      type="button"
+      class="btn-edit"
+      *ngIf="!isEditing"
+      (click)="enableEdit()">
+
+      Editar información
+
+    </button>
+
+    <ng-container *ngIf="isEditing">
+
+      <button
+        type="button"
+        class="btn-cancel"
+        (click)="cancelEdit()">
+
+        Cancelar edición
+
+      </button>
+
+      <span class="editing-message">
+        Puedes modificar los datos y presionar Guardar cambios.
+      </span>
+
+    </ng-container>
+
+  </div>
+
+  <!-- Vista de captura. -->
+  <div *ngIf="activeView === 'capture'">
+
+    <!-- Primera página:
+         datos generales, directivos y administrativos. -->
+    <div
+      class="form-page"
+      *ngIf="currentPage === 1">
+
+      <div class="form-grid">
+
+        <!-- Datos generales. -->
+        <div class="form-card">
+
+          <label for="totalGeneral">
+            Total General del Personal
+          </label>
+
+          <input
+            id="totalGeneral"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.totalGeneral" />
+
+          <label for="fechaRegistro">
+            Fecha de Registro
+          </label>
+
+          <input
+            id="fechaRegistro"
+            type="text"
+            [value]="fechaRegistro"
+            readonly />
+
+          <label for="periodo">
+            Periodo
+          </label>
+
+          <input
+            id="periodo"
+            type="text"
+            [value]="periodo"
+            readonly />
+
+        </div>
+
+        <!-- Personal directivo. -->
+        <div class="form-card">
+
+          <label for="totalDirectivos">
+            Total del Personal Directivo
+          </label>
+
+          <input
+            id="totalDirectivos"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.totalDirectivos" />
+
+          <label for="directivosHombres">
+            Total de Hombres Directivos
+          </label>
+
+          <input
+            id="directivosHombres"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.directivosHombres" />
+
+          <label for="directivosMujeres">
+            Total de Mujeres Directivas
+          </label>
+
+          <input
+            id="directivosMujeres"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.directivosMujeres" />
+
+        </div>
+
+        <!-- Personal administrativo. -->
+        <div class="form-card">
+
+          <label for="totalAdministrativos">
+            Total del Personal Administrativo
+          </label>
+
+          <input
+            id="totalAdministrativos"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.totalAdministrativos" />
+
+          <label for="administrativosHombres">
+            Total de Hombres Administrativos
+          </label>
+
+          <input
+            id="administrativosHombres"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.administrativosHombres" />
+
+          <label for="administrativosMujeres">
+            Total de Mujeres Administrativas
+          </label>
+
+          <input
+            id="administrativosMujeres"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.administrativosMujeres" />
+
+        </div>
+
+      </div>
+
+      <!-- Navegación a la segunda página. -->
+      <div class="page-actions">
+
+        <button
+          type="button"
+          (click)="nextPage()">
+
+          Página 2 →
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Segunda página:
+         docentes, contratación y nivel académico. -->
+    <div
+      class="form-page"
+      *ngIf="currentPage === 2">
+
+      <div class="form-grid">
+
+        <!-- Datos generales de docentes. -->
+        <div class="form-card">
+
+          <label for="totalDocentes">
+            Total de Docentes
+          </label>
+
+          <input
+            id="totalDocentes"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.totalDocentes" />
+
+          <label for="docentesHombres">
+            Total de Hombres Docentes
+          </label>
+
+          <input
+            id="docentesHombres"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.docentesHombres" />
+
+          <label for="docentesMujeres">
+            Total de Mujeres Docentes
+          </label>
+
+          <input
+            id="docentesMujeres"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.docentesMujeres" />
+
+        </div>
+
+        <!-- Distribución por tipo de contratación. -->
+        <div class="form-card">
+
+          <label for="docentesTiempoCompleto">
+            Docentes de Tiempo Completo
+          </label>
+
+          <input
+            id="docentesTiempoCompleto"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.docentesTiempoCompleto" />
+
+          <label for="docentesAsignatura">
+            Docentes por Asignatura
+          </label>
+
+          <input
+            id="docentesAsignatura"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.docentesAsignatura" />
+
+          <label for="docentesHora">
+            Docentes por Hora
+          </label>
+
+          <input
+            id="docentesHora"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.docentesHora" />
+
+        </div>
+
+        <!-- Nivel académico predominante. -->
+        <div class="form-card compact">
+
+          <label for="idNivelAcademico">
+            Nivel Académico Predominante
+          </label>
+
+          <select
+            id="idNivelAcademico"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="personalReport.idNivelAcademico">
+
+            <option [ngValue]="null">
+              Selecciona una opción
+            </option>
+
+            <option
+              *ngFor="let nivel of nivelesAcademicos"
+              [ngValue]="nivel.id">
+
+              {{ nivel.strValor }}
+
+            </option>
+
+          </select>
+
+          <label for="periodoDocentes">
+            Periodo
+          </label>
+
+          <input
+            id="periodoDocentes"
+            type="text"
+            [value]="periodo"
+            readonly />
+
+        </div>
+
+      </div>
+
+      <!-- Navegación de la segunda página. -->
+      <div class="page-actions split">
+
+        <button
+          type="button"
+          (click)="previousPage()">
+
+          ← Página 1
+
+        </button>
+
+        <button
+          type="button"
+          (click)="showPreview()">
+
+          Vista previa
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Vista previa de la información capturada. -->
+  <div
+    class="preview-panel"
+    *ngIf="activeView === 'preview'">
+
+    <div class="preview-notice">
+      Revisa que la información sea correcta antes de guardar.
+    </div>
+
+    <div class="preview-grid">
+
+      <!-- Resumen general. -->
+      <div class="preview-card">
+
+        <h3>
+          Resumen General
+        </h3>
+
+        <p>
+          <strong>Periodo:</strong>
+          {{ periodo || 'Sin periodo activo' }}
+        </p>
+
+        <p>
+          <strong>Total general:</strong>
+          {{ personalReport.totalGeneral ?? 0 }}
+        </p>
+
+        <p>
+          <strong>Directivos:</strong>
+          {{ personalReport.totalDirectivos ?? 0 }}
+        </p>
+
+        <p>
+          <strong>Administrativos:</strong>
+          {{ personalReport.totalAdministrativos ?? 0 }}
+        </p>
+
+        <p>
+          <strong>Docentes:</strong>
+          {{ personalReport.totalDocentes ?? 0 }}
+        </p>
+
+      </div>
+
+      <!-- Distribución por sexo. -->
+      <div class="preview-card">
+
+        <h3>
+          Distribución por Sexo
+        </h3>
+
+        <p>
+          <strong>Directivos:</strong>
+          {{ personalReport.directivosHombres ?? 0 }} hombres /
+          {{ personalReport.directivosMujeres ?? 0 }} mujeres
+        </p>
+
+        <p>
+          <strong>Administrativos:</strong>
+          {{ personalReport.administrativosHombres ?? 0 }} hombres /
+          {{ personalReport.administrativosMujeres ?? 0 }} mujeres
+        </p>
+
+        <p>
+          <strong>Docentes:</strong>
+          {{ personalReport.docentesHombres ?? 0 }} hombres /
+          {{ personalReport.docentesMujeres ?? 0 }} mujeres
+        </p>
+
+      </div>
+
+      <!-- Distribución de docentes. -->
+      <div class="preview-card">
+
+        <h3>
+          Distribución de Docentes
+        </h3>
+
+        <p>
+          <strong>Tiempo completo:</strong>
+          {{ personalReport.docentesTiempoCompleto ?? 0 }}
+        </p>
+
+        <p>
+          <strong>Por asignatura:</strong>
+          {{ personalReport.docentesAsignatura ?? 0 }}
+        </p>
+
+        <p>
+          <strong>Por hora:</strong>
+          {{ personalReport.docentesHora ?? 0 }}
+        </p>
+
+      </div>
+      
+
+    </div>
+
+    <!-- Gráficas generadas con la información capturada. -->
+<div class="preview-grid charts-grid">
+  <app-bar-chart
+    [title]="'Personal por categoría'"
+    [labels]="[
+      'Directivos',
+      'Administrativos',
+      'Docentes'
+    ]"
+    [series]="[
+      {
+        name: periodo || 'Periodo actual',
+        values: [
+          personalReport.totalDirectivos ?? 0,
+          personalReport.totalAdministrativos ?? 0,
+          personalReport.totalDocentes ?? 0
+        ]
+      }
+    ]">
+  </app-bar-chart>
+
+  <app-bar-chart
+    [title]="'Personal por categoría y sexo'"
+    [labels]="[
+      'Hombres',
+      'Mujeres'
+    ]"
+    [series]="[
+      {
+        name: 'Directivos',
+        values: [
+          personalReport.directivosHombres ?? 0,
+          personalReport.directivosMujeres ?? 0
+        ]
+      },
+      {
+        name: 'Administrativos',
+        values: [
+          personalReport.administrativosHombres ?? 0,
+          personalReport.administrativosMujeres ?? 0
+        ]
+      },
+      {
+        name: 'Docentes',
+        values: [
+          personalReport.docentesHombres ?? 0,
+          personalReport.docentesMujeres ?? 0
+        ]
+      }
+    ]">
+  </app-bar-chart>
+
+  <app-bar-chart
+    [title]="'Distribución de docentes por tipo de contratación'"
+    [labels]="[
+      'Tiempo completo',
+      'Asignatura',
+      'Por hora'
+    ]"
+    [series]="[
+      {
+        name: periodo || 'Periodo actual',
+        values: [
+          personalReport.docentesTiempoCompleto ?? 0,
+          personalReport.docentesAsignatura ?? 0,
+          personalReport.docentesHora ?? 0
+        ]
+      }
+    ]">
+  </app-bar-chart>
+
+</div>
+
+
+
+    <!-- Regresa a la captura para corregir información. -->
+    <div class="page-actions">
+
+      <button
+        type="button"
+        (click)="showCapture()">
+
+        Regresar a captura
+
+      </button>
+
+    </div>
+
+  </div>
+
+</section>

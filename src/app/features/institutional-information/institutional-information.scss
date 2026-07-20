@@ -18,6 +18,7 @@
 
 .sidebar-collapsed {
   width: 48px;
+  
   align-items: center;
 }
 
@@ -194,4 +195,22 @@
   background: #fdecec;
   color: #9b1c1c;
   border: 1px solid #d93025;
+}
+
+/*
+ * Mantiene habilitado el acceso al módulo
+ * de infraestructura.
+ */
+.infrastructure-menu-item {
+  width: 100%;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+}
+
+.infrastructure-menu-item.active {
+  border: 3px solid #23b64b;
 }

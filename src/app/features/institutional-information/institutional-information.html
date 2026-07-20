@@ -53,14 +53,28 @@
 
       </a>
 
-      <!-- Secciones futuras del registro institucional. -->
-      <a class="menu-item disabled">
-        Datos del Personal
+      <!-- Módulo de captura de información del personal. -->
+      <a
+        class="menu-item"
+        [class.active]="currentStep === 2"
+        (click)="goToStep(2)">
+
+       Datos del Personal
+
       </a>
 
-      <a class="menu-item disabled">
-        Datos de Infraestructura
-      </a>
+      <!-- Módulo de captura de información de infraestructura. -->
+<button
+  type="button"
+  class="menu-item infrastructure-menu-item"
+  [class.active]="currentStep === 3"
+  [class.disabled]="!personalCompleted"
+  [disabled]="!personalCompleted"
+  (click)="goToStep(3)">
+
+  Datos de Infraestructura
+
+</button>
 
       <a class="menu-item disabled">
         Datos de Finanzas
@@ -97,46 +111,94 @@
 
         </button>
 
-        <!-- Indicador del módulo actual. -->
-        <div class="steps">
+   <!-- Indicadores de avance de los módulos institucionales. -->
+      <div class="steps">
 
-          <div
-            class="step"
-            [class.active]="currentStep === 1"
-            [class.completed]="enrollmentCompleted">
+        <div
+          class="step"
+          [class.active]="currentStep === 1"
+          [class.completed]="enrollmentCompleted">
 
-            <span>
-              {{ enrollmentCompleted ? '✓' : '1' }}
-            </span>
+          <span>
+            {{ enrollmentCompleted ? '✓' : '1' }}
+          </span>
 
-            <p>
-              Datos de Matrículas
-            </p>
-
-          </div>
+          <p>
+            Datos de Matrículas
+          </p>
 
         </div>
 
-        <!-- Guarda el reporte de matrícula. -->
-         <button
+        <div
+          class="step"
+          [class.active]="currentStep === 2">
+
+          <span>
+            2
+          </span>
+
+          <p>
+            Datos del Personal
+          </p>
+
+        </div>
+
+        <div
+        class="step"
+        [class.active]="currentStep === 3">
+
+        <span>
+          3
+        </span>
+
+        <p>
+          Datos de Infraestructura
+        </p>
+
+      </div>
+
+      </div>
+
+        <!-- Guarda la información de la sección activa. -->
+<button
   class="btn-nav"
   type="button"
   [disabled]="
     isSaving ||
     (
+      currentStep === 1 &&
       enrollmentDataComponent?.reportSaved &&
       !enrollmentDataComponent?.isEditing
+    ) ||
+    (
+      currentStep === 2 &&
+      personalDataComponent?.reportSaved &&
+      !personalDataComponent?.isEditing
+    ) ||
+    (
+      currentStep === 3 &&
+      infrastructureDataComponent?.reportSaved &&
+      !infrastructureDataComponent?.isEditing
     )
   "
-  (click)="saveEnrollmentData()">
+  (click)="saveCurrentSection()">
 
   {{
     isSaving
       ? 'Guardando...'
-      : enrollmentDataComponent?.reportSaved &&
+      : currentStep === 1 &&
+        enrollmentDataComponent?.reportSaved &&
         enrollmentDataComponent?.isEditing
         ? 'Guardar cambios'
-        : 'Guardar'
+        : currentStep === 2 &&
+          personalDataComponent?.reportSaved &&
+          personalDataComponent?.isEditing
+          ? 'Guardar cambios'
+          : currentStep === 3 &&
+            infrastructureDataComponent?.reportSaved &&
+            infrastructureDataComponent?.isEditing
+            ? 'Guardar cambios'
+            : 'Guardar'
   }}
 
 </button>
@@ -154,13 +216,28 @@
 
       </div>
 
-      <!-- Formulario del módulo de matrícula. -->
-      <app-enrollment-data
-        *ngIf="currentStep === 1">
-      </app-enrollment-data>
+     <!-- Formulario del módulo de matrícula. -->
+    <app-enrollment-data
+      *ngIf="currentStep === 1">
+    </app-enrollment-data>
+
+    <!-- Formulario del módulo de personal. -->
+    <app-personal-data
+  *ngIf="currentStep === 2"
+  (personalCompletedChange)="personalCompleted = $event">
+</app-personal-data>
+
+        <!-- Formulario del módulo de infraestructura. -->
+    <app-infrastructure-data
+      *ngIf="currentStep === 3">
+    </app-infrastructure-data>
 
     </section>
 
   </main>
 
 </div>
+
+
+
+

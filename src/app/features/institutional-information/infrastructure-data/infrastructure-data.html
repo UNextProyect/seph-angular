@@ -1,0 +1,461 @@
+<!-- Contenedor principal del reporte de infraestructura. -->
+<section class="infrastructure-section">
+
+  <!-- Mensajes de éxito y validación del formulario. -->
+  <div
+    class="save-message"
+    [class.success]="saveMessageType === 'success'"
+    [class.error]="saveMessageType === 'error'"
+    *ngIf="saveMessage">
+
+    {{ saveMessage }}
+
+  </div>
+
+  <!-- Encabezado de la sección. -->
+  <div class="section-header">
+
+    <div>
+
+      <h2>
+Datos de Infraestructura 
+      </h2>
+
+      <p>
+        Captura la información de los espacios, servicios
+        y condiciones de accesibilidad de la institución.
+      </p>
+
+    </div>
+
+    <!-- Cambia entre captura y vista previa. -->
+    <div class="view-actions">
+
+      <button
+        type="button"
+        [class.active]="activeView === 'capture'"
+        (click)="showCapture()">
+
+        Captura
+
+      </button>
+
+      <button
+        type="button"
+        [class.active]="activeView === 'preview'"
+        (click)="showPreview()">
+
+        Vista previa
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Acciones disponibles cuando ya existe un reporte. -->
+  <div
+    class="edit-actions"
+    *ngIf="reportSaved">
+
+    <button
+      type="button"
+      class="btn-edit"
+      *ngIf="!isEditing"
+      (click)="enableEdit()">
+
+      Editar información
+
+    </button>
+
+    <ng-container *ngIf="isEditing">
+
+      <button
+        type="button"
+        class="btn-cancel"
+        (click)="cancelEdit()">
+
+        Cancelar edición
+
+      </button>
+
+      <span class="editing-message">
+        Puedes modificar los datos y presionar Guardar cambios.
+      </span>
+
+    </ng-container>
+
+  </div>
+
+  <!-- Vista de captura de infraestructura. -->
+  <div *ngIf="activeView === 'capture'">
+
+    <div class="form-page">
+
+      <div class="form-grid">
+
+        <!-- Espacios educativos disponibles. -->
+        <div class="form-card">
+
+          <label for="totalAulas">
+            Total de Aulas
+          </label>
+
+          <input
+            id="totalAulas"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="infrastructureReport.totalAulas" />
+
+          <label for="totalLaboratorios">
+            Total de Laboratorios
+          </label>
+
+          <input
+            id="totalLaboratorios"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="infrastructureReport.totalLaboratorios" />
+
+          <label for="totalTalleres">
+            Total de Talleres
+          </label>
+
+          <input
+            id="totalTalleres"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="infrastructureReport.totalTalleres" />
+
+        </div>
+
+        <!-- Biblioteca y equipos de cómputo. -->
+        <div class="form-card">
+
+          <label for="biblioteca">
+            ¿Cuenta con Biblioteca?
+          </label>
+
+          <select
+            id="biblioteca"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="infrastructureReport.biblioteca"
+            (ngModelChange)="onBibliotecaChange($event)">
+
+            <option [ngValue]="false">
+              No
+            </option>
+
+            <option [ngValue]="true">
+              Sí
+            </option>
+
+          </select>
+
+          <label for="totalBibliotecas">
+            Total de Bibliotecas
+          </label>
+
+          <input
+            id="totalBibliotecas"
+            type="number"
+            min="0"
+            [disabled]="
+              !infrastructureReport.biblioteca ||
+              (reportSaved && !isEditing)
+            "
+            [(ngModel)]="infrastructureReport.totalBibliotecas" />
+
+          <label for="totalComputo">
+            Total de Equipos de Cómputo
+          </label>
+
+          <input
+            id="totalComputo"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="infrastructureReport.totalComputo" />
+
+        </div>
+
+        <!-- Servicios, accesibilidad y periodo. -->
+        <div class="form-card">
+
+          <label for="idInternet">
+            Acceso a Internet
+          </label>
+
+          <select
+            id="idInternet"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="infrastructureReport.idInternet">
+
+            <option [ngValue]="null">
+              Selecciona una opción
+            </option>
+
+            <option
+              *ngFor="let opcion of internet"
+              [ngValue]="opcion.id">
+
+              {{ opcion.strValor }}
+
+            </option>
+
+          </select>
+
+          <label for="idDiscapacitado">
+            Instalaciones para Personas con Discapacidad
+          </label>
+
+          <select
+            id="idDiscapacitado"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="infrastructureReport.idDiscapacitado">
+
+            <option [ngValue]="null">
+              Selecciona una opción
+            </option>
+
+            <option
+              *ngFor="let opcion of discapacitados"
+              [ngValue]="opcion.id">
+
+              {{ opcion.strValor }}
+
+            </option>
+
+          </select>
+
+          <label for="periodo">
+            Periodo
+          </label>
+
+          <input
+            id="periodo"
+            type="text"
+            [value]="periodo"
+            readonly />
+
+        </div>
+
+      </div>
+
+      
+      <!-- Acciones disponibles en la vista previa. -->
+<div class="page-actions split">
+
+  <!-- Regresa al formulario para corregir información. -->
+  <button
+    type="button"
+    (click)="showCapture()">
+
+    Regresar a captura
+
+  </button>
+
+    <!-- Guarda o actualiza el reporte de infraestructura. -->
+    <button
+        type="button"
+        [disabled]="
+        isSaving ||
+        (reportSaved && !isEditing)
+        "
+        (click)="saveInfrastructureData()">
+
+        {{
+        isSaving
+            ? 'Guardando...'
+            : reportSaved
+            ? 'Guardar cambios'
+            : 'Guardar información'
+        }}
+
+    </button>
+
+    </div>
+
+    </div>
+
+  </div>
+
+  <!-- Vista previa de la información capturada. -->
+  <div
+    class="preview-panel"
+    *ngIf="activeView === 'preview'">
+
+    <div class="preview-notice">
+      Revisa que la información sea correcta antes de guardar.
+    </div>
+
+    <div class="preview-grid">
+
+      <!-- Resumen de espacios educativos. -->
+      <div class="preview-card">
+
+        <h3>
+          Espacios Educativos
+        </h3>
+
+        <p>
+          <strong>Periodo:</strong>
+          {{ periodo || 'Sin periodo activo' }}
+        </p>
+
+        <p>
+          <strong>Total de aulas:</strong>
+          {{ infrastructureReport.totalAulas ?? 0 }}
+        </p>
+
+        <p>
+          <strong>Total de laboratorios:</strong>
+          {{ infrastructureReport.totalLaboratorios ?? 0 }}
+        </p>
+
+        <p>
+          <strong>Total de talleres:</strong>
+          {{ infrastructureReport.totalTalleres ?? 0 }}
+        </p>
+
+      </div>
+
+      <!-- Resumen de biblioteca y cómputo. -->
+      <div class="preview-card">
+
+        <h3>
+          Biblioteca y Cómputo
+        </h3>
+
+        <p>
+          <strong>Cuenta con biblioteca:</strong>
+
+          {{
+            infrastructureReport.biblioteca
+              ? 'Sí'
+              : 'No'
+          }}
+        </p>
+
+        <p>
+          <strong>Total de bibliotecas:</strong>
+          {{ infrastructureReport.totalBibliotecas ?? 0 }}
+        </p>
+
+        <p>
+          <strong>Equipos de cómputo:</strong>
+          {{ infrastructureReport.totalComputo ?? 0 }}
+        </p>
+
+      </div>
+
+      <!-- Resumen de servicios y accesibilidad. -->
+      <div class="preview-card">
+
+        <h3>
+          Servicios y Accesibilidad
+        </h3>
+
+        <p>
+          <strong>Acceso a internet:</strong>
+          {{ getInternetName() }}
+        </p>
+
+        <p>
+          <strong>
+            Instalaciones para personas con discapacidad:
+          </strong>
+
+          {{ getDiscapacitadoName() }}
+        </p>
+
+        <p *ngIf="fechaRegistro">
+
+          <strong>Fecha de registro:</strong>
+          {{ fechaRegistro }}
+
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- Gráficas generadas con la información capturada. -->
+    <div class="preview-grid charts-grid">
+
+      <!-- Comparación de espacios educativos. -->
+      <app-bar-chart
+        [title]="'Espacios educativos disponibles'"
+        [labels]="[
+          'Aulas',
+          'Laboratorios',
+          'Talleres'
+        ]"
+        [series]="[
+          {
+            name: periodo || 'Periodo actual',
+            values: [
+              infrastructureReport.totalAulas ?? 0,
+              infrastructureReport.totalLaboratorios ?? 0,
+              infrastructureReport.totalTalleres ?? 0
+            ]
+          }
+        ]">
+      </app-bar-chart>
+
+      <!-- Comparación de bibliotecas y equipos de cómputo. -->
+      <app-bar-chart
+        [title]="'Biblioteca y equipos de cómputo'"
+        [labels]="[
+          'Bibliotecas',
+          'Equipos de cómputo'
+        ]"
+        [series]="[
+          {
+            name: periodo || 'Periodo actual',
+            values: [
+              infrastructureReport.totalBibliotecas ?? 0,
+              infrastructureReport.totalComputo ?? 0
+            ]
+          }
+        ]">
+      </app-bar-chart>
+
+    </div>
+
+
+    
+   <!-- Guarda o actualiza el reporte de infraestructura. -->
+<div class="page-actions split">
+
+  <button
+    type="button"
+    (click)="showCapture()">
+
+    Regresar a captura
+
+  </button>
+
+  <button
+    type="button"
+    [disabled]="isSaving || (reportSaved && !isEditing)"
+    (click)="saveInfrastructureData()">
+
+    {{
+      isSaving
+        ? 'Guardando...'
+        : reportSaved
+          ? 'Guardar cambios'
+          : 'Guardar información'
+    }}
+
+  </button>
+
+</div>
+
+  </div>
+
+</section>

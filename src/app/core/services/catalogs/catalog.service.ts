@@ -7,7 +7,8 @@ import { SexResponse } from '../../../shared/models/catalogs/responses/sexRespon
 import { PerfilAcademicoResponse } from '../../../shared/models/catalogs/responses/perfilAcademicoResponse';
 import { MunicipioResponse } from '../../../shared/models/catalogs/responses/municipioResponse';
 import { NivelAcademicoResponse } from '../../../shared/models/catalogs/responses/nivelAcademicoResponse';
-
+import { InternetResponse }from '../../../shared/models/catalogs/responses/internetResponse';
+import { DiscapacitadoResponse }from '../../../shared/models/catalogs/responses/discapacitadoResponse';
 @Injectable({
   providedIn: 'root'
 })
@@ -57,4 +58,16 @@ export class CatalogService {
     `${this.apiUrl}/niveles-academicos`
   );
 }
+getInternet(): Observable<ApiResponse<InternetResponse[]>> {
+  return this.http.get<ApiResponse<InternetResponse[]>>(
+    `${this.apiUrl}/internet`
+  );
+}
+
+getDiscapacitados(): Observable<ApiResponse<DiscapacitadoResponse[]>> {
+  return this.http.get<ApiResponse<DiscapacitadoResponse[]>>(
+    `${this.apiUrl}/discapacitados`
+  );
+}
+
 }
