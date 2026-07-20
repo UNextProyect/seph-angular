@@ -68,7 +68,14 @@ export const routes: Routes = [
         path: 'bitacoras',
         loadChildren: () =>
           import('./features/admin/bitacoras/bitacorasRoutes').then(m => m.bitacorasRoutes)
+      },
+      {
+      path: 'periodos',
+      loadChildren: () =>
+      import('./features/admin/periods/periodsRoutes')
+      .then(m => m.periodsRoutes)
       }
+    
     ]
   },
   {

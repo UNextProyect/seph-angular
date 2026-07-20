@@ -1,0 +1,239 @@
+<!-- Concentrado de periodos registrados en el sistema. -->
+<div class="summary-page">
+
+  <!-- Encabezado del módulo y acciones principales. -->
+  <div class="summary-header">
+
+    <div class="summary-title">
+      <h2>Catálogo de Periodos</h2>
+      <p>Concentrado de los periodos registrados</p>
+    </div>
+
+    <div class="summary-actions">
+
+      <a
+        class="btn-secondary"
+        routerLink="/admin">
+        Inicio
+      </a>
+
+      <a
+        class="btn-primary"
+        routerLink="/admin/periodos/nuevo">
+        + Nuevo Periodo
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- Notificación visual de éxito o error. -->
+  @if (notificationMessage()) {
+    <div
+      class="notification"
+      [class.success]="notificationType() === 'success'"
+      [class.error]="notificationType() === 'error'">
+
+      {{ notificationMessage() }}
+
+    </div>
+  }
+
+  <!-- Estado de carga. -->
+  @if (isLoading()) {
+    <p class="loading">
+      Cargando periodos...
+    </p>
+  }
+
+  <!-- Mensaje cuando todavía no existen registros. -->
+  @if (!isLoading() && registros().length === 0) {
+    <div class="empty-state">
+      <p>Aún no hay periodos registrados.</p>
+    </div>
+  }
+
+  <!-- Tabla del concentrado. -->
+  @if (!isLoading() && registros().length > 0) {
+    <div class="table-card">
+
+      <table class="records-table">
+
+        <thead>
+          <tr>
+            <th>Clave</th>
+            <th>Descripción</th>
+            <th>Año</th>
+            <th>Número de periodo</th>
+            <th>Fecha de inicio</th>
+            <th>Fecha de fin</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (registro of registros(); track registro.id) {
+            <tr>
+
+              <td>{{ registro.strNombre }}</td>
+
+              <td>{{ registro.strDescripcion }}</td>
+
+              <td>{{ registro.intAnio }}</td>
+
+              <td>{{ registro.intNumeroPeriodo }}</td>
+
+              <td>
+                {{ registro.dateFechaInicio | date: 'dd/MM/yyyy' }}
+              </td>
+
+              <td>
+                {{ registro.dateFechaFin | date: 'dd/MM/yyyy' }}
+              </td>
+
+              <td>
+                <span
+                  class="badge"
+                  [class.badge-complete]="registro.bitActivo"
+                  [class.badge-incomplete]="!registro.bitActivo">
+
+                  {{ registro.bitActivo ? 'Activo' : 'Inactivo' }}
+
+                </span>
+              </td>
+
+              <td class="actions-cell">
+
+                <button
+                  type="button"
+                  class="btn-detalle"
+                  (click)="openDetalle(registro)">
+                  Detalle
+                </button>
+
+                <a
+                  class="btn-editar"
+                  [routerLink]="[
+                    '/admin/periodos',
+                    registro.id,
+                    'editar'
+                  ]">
+                  Editar
+                </a>
+
+                @if (registro.bitActivo) {
+                  <button
+                    type="button"
+                    class="btn-desactivar"
+                    (click)="desactivar(registro)">
+                    Desactivar
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    class="btn-reactivar"
+                    (click)="reactivar(registro)">
+                    Reactivar
+                  </button>
+                }
+
+              </td>
+
+            </tr>
+          }
+        </tbody>
+
+      </table>
+
+    </div>
+  }
+
+  <!-- Modal de detalle del periodo seleccionado. -->
+  @if (selectedRegistro(); as registro) {
+    <div
+      class="modal-overlay"
+      (click)="closeDetalle()">
+
+      <div
+        class="modal-card"
+        (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+          <h3>Detalle del periodo</h3>
+
+          <button
+            type="button"
+            class="btn-close"
+            (click)="closeDetalle()">
+            ✕
+          </button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="detail-row">
+            <span class="detail-label">Clave</span>
+            <span class="detail-value">
+              {{ registro.strNombre }}
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Descripción</span>
+            <span class="detail-value">
+              {{ registro.strDescripcion }}
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Año</span>
+            <span class="detail-value">
+              {{ registro.intAnio }}
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Número de periodo</span>
+            <span class="detail-value">
+              {{ registro.intNumeroPeriodo }}
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Fecha de inicio</span>
+            <span class="detail-value">
+              {{ registro.dateFechaInicio | date: 'dd/MM/yyyy' }}
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Fecha de fin</span>
+            <span class="detail-value">
+              {{ registro.dateFechaFin | date: 'dd/MM/yyyy' }}
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Estado</span>
+
+            <span class="detail-value">
+              <span
+                class="badge"
+                [class.badge-complete]="registro.bitActivo"
+                [class.badge-incomplete]="!registro.bitActivo">
+
+                {{ registro.bitActivo ? 'Activo' : 'Inactivo' }}
+
+              </span>
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  }
+
+</div>
