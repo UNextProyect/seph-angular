@@ -1,0 +1,110 @@
+<div class="create-page">
+
+  <!-- Encabezado del formulario. -->
+  <div class="create-header">
+
+    <div class="create-title">
+      <h2>
+        {{ periodoId ? 'Editar Periodo' : 'Registrar Periodo' }}
+      </h2>
+
+      <p>
+        {{ periodoId
+          ? 'Actualiza los datos del periodo seleccionado'
+          : 'Alta de un nuevo periodo institucional' }}
+      </p>
+    </div>
+
+    <a
+      class="btn-secondary"
+      routerLink="/admin/periodos">
+      Volver al concentrado
+    </a>
+
+  </div>
+
+  <!-- Notificación visual. -->
+  @if (notificationMessage()) {
+    <div
+      class="notification"
+      [class.success]="notificationType() === 'success'"
+      [class.error]="notificationType() === 'error'">
+
+      {{ notificationMessage() }}
+
+    </div>
+  }
+
+  <!-- Estado de carga al editar. -->
+  @if (isLoading()) {
+    <p class="loading">
+      Cargando información del periodo...
+    </p>
+  } @else {
+
+    <form
+      class="form-card"
+      (ngSubmit)="savePeriodo()">
+
+      <div class="form-grid">
+
+        <div class="field-card">
+          <label>Año *</label>
+
+          <input
+            type="number"
+            name="intAnio"
+            min="1"
+            [(ngModel)]="periodo.intAnio"
+          />
+        </div>
+
+        <div class="field-card">
+          <label>Número de periodo *</label>
+
+          <input
+            type="number"
+            name="intNumeroPeriodo"
+            min="1"
+            [(ngModel)]="periodo.intNumeroPeriodo"
+          />
+        </div>
+
+        <div class="field-card">
+          <label>Fecha de inicio *</label>
+
+          <input
+            type="date"
+            name="dateFechaInicio"
+            [(ngModel)]="periodo.dateFechaInicio"
+          />
+        </div>
+
+        <div class="field-card">
+          <label>Fecha de fin *</label>
+
+          <input
+            type="date"
+            name="dateFechaFin"
+            [(ngModel)]="periodo.dateFechaFin"
+          />
+        </div>
+
+      </div>
+
+      <button
+        class="btn-primary"
+        type="submit"
+        [disabled]="isSaving()">
+
+        {{ isSaving()
+          ? 'Guardando...'
+          : (periodoId ? 'Guardar Cambios' : 'Registrar Periodo') }}
+
+      </button>
+
+    </form>
+
+  }
+
+</div>
