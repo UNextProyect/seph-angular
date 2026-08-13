@@ -38,9 +38,14 @@
     class="toggle-password"
     (click)="togglePassword()">
 
-    <span class="material-symbols-outlined">
-      {{ mostrarPassword ? 'visibility_off' : 'visibility' }}
-    </span>
+  <span
+  class="material-symbols-outlined notranslate"
+  translate="no"
+  aria-hidden="true">
+
+  {{ mostrarPassword ? 'visibility_off' : 'visibility' }}
+
+</span>
 
   </button>
 </div>

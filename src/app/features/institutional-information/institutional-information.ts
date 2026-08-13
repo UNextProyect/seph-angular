@@ -1,14 +1,14 @@
-import { ChangeDetectorRef, Component, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component,  OnInit, ViewChild, inject } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { EnrollmentDataComponent } from './enrollment-data/enrollment-data';
+import {ActivatedRoute,RouterLink} from '@angular/router';import { EnrollmentDataComponent } from './enrollment-data/enrollment-data';
 import { PersonalDataComponent } from './personal-data/personal-data';
 import { InfrastructureDataComponent } from './infrastructure-data/infrastructure-data';
 import { VinculationDataComponent } from './vinculation-data/vinculation-data';
 import { FinanceDataComponent } from './finance-data/finance-data';
 import { StrategicAnalysisDataComponent } from './strategic-analysis-data/strategic-analysis-data';
 import { PatentDataComponent }from './patent-data/patent-data';
+import { RecordsSummaryComponent }from './records-summary/records-summary';
 
 @Component({
   selector: 'app-institutional-information',
@@ -16,6 +16,7 @@ import { PatentDataComponent }from './patent-data/patent-data';
   imports: [
     CommonModule,
     RouterLink,
+    RecordsSummaryComponent,
     EnrollmentDataComponent,
     PersonalDataComponent,
     InfrastructureDataComponent,
@@ -28,7 +29,44 @@ import { PatentDataComponent }from './patent-data/patent-data';
   templateUrl: './institutional-information.html',
   styleUrl: './institutional-information.scss'
 })
-export class InstitutionalInformationComponent {
+export class InstitutionalInformationComponent implements OnInit{
+
+  /*
+ * Permite identificar si la ruta actual
+ * corresponde a comparación o captura.
+ */
+private activatedRoute =
+  inject(ActivatedRoute);
+
+/*
+ * Indica si debe mostrarse la visualización
+ * y comparación de registros institucionales.
+ */
+isComparisonView =
+  this.activatedRoute.snapshot.data['view'] ===
+  'comparison';
+
+  /*
+ * Abre el módulo indicado mediante
+ * el parámetro step de la ruta.
+ */
+ngOnInit(): void {
+  this.activatedRoute.queryParamMap
+    .subscribe(params => {
+      const stepParam = params.get('step');
+      const step = Number(stepParam ?? 1);
+
+      if (
+        Number.isInteger(step) &&
+        step >= 1 &&
+        step <= 7
+      ) {
+        this.currentStep = step;
+      } else {
+        this.currentStep = 1;
+      }
+    });
+}
 
   /*
    * Referencia al formulario de matrícula.

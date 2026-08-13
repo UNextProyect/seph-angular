@@ -17,68 +17,76 @@
 
     </div>
 
-    <!-- Navegación de las secciones institucionales. -->
+    <!-- Navegación permanente del módulo institucional. -->
     <nav class="menu" *ngIf="!menuCollapsed">
 
       <a class="menu-item" routerLink="/home">
         Inicio
       </a>
 
-
-      <a class="menu-item" routerLink="/institutional-information">
+      <!-- Vista de comparación. -->
+      <a class="menu-item" routerLink="/institutional-information" [class.active]="isComparisonView">
         Visualización de Registros
       </a>
 
-      <!-- Módulo activo actualmente. -->
-      <a class="menu-item" [class.active]="currentStep === 1" [class.completed]="enrollmentCompleted"
-        (click)="goToStep(1)">
-
+      <!-- Módulo de matrículas. -->
+      <a class="menu-item" routerLink="/institutional-information/nuevo" [queryParams]="{ step: 1 }" [class.active]="
+      !isComparisonView &&
+      currentStep === 1
+    " [class.completed]="
+      !isComparisonView &&
+      enrollmentCompleted
+    ">
         Datos de Matrículas
-
       </a>
 
-      <!-- Módulo de captura de información del personal. -->
-      <a class="menu-item" [class.active]="currentStep === 2" (click)="goToStep(2)">
-
+      <!-- Módulo de personal. -->
+      <a class="menu-item" routerLink="/institutional-information/nuevo" [queryParams]="{ step: 2 }" [class.active]="
+      !isComparisonView &&
+      currentStep === 2
+    ">
         Datos del Personal
-
       </a>
 
-      <!-- Módulo de captura de información de infraestructura. -->
-      <button type="button" class="menu-item infrastructure-menu-item" [class.active]="currentStep === 3"
-        (click)="goToStep(3)">
-
+      <!-- Módulo de infraestructura. -->
+      <a class="menu-item" routerLink="/institutional-information/nuevo" [queryParams]="{ step: 3 }" [class.active]="
+      !isComparisonView &&
+      currentStep === 3
+    ">
         Datos de Infraestructura
+      </a>
 
-      </button>
-
-      <!-- Módulo de captura de información financiera. -->
-      <button type="button" class="menu-item" [class.active]="currentStep === 4" (click)="goToStep(4)">
-
+      <!-- Módulo de finanzas. -->
+      <a class="menu-item" routerLink="/institutional-information/nuevo" [queryParams]="{ step: 4 }" [class.active]="
+      !isComparisonView &&
+      currentStep === 4
+    ">
         Datos de Finanzas
-
-      </button>
+      </a>
 
       <!-- Módulo de vinculación y resultados. -->
-      <button type="button" class="menu-item" [class.active]="currentStep === 5" (click)="goToStep(5)">
-
+      <a class="menu-item" routerLink="/institutional-information/nuevo" [queryParams]="{ step: 5 }" [class.active]="
+      !isComparisonView &&
+      currentStep === 5
+    ">
         Vinculación y Resultados
-
-      </button>
+      </a>
 
       <!-- Módulo de análisis estratégico. -->
-      <button type="button" class="menu-item" [class.active]="currentStep === 6" (click)="goToStep(6)">
-
+      <a class="menu-item" routerLink="/institutional-information/nuevo" [queryParams]="{ step: 6 }" [class.active]="
+      !isComparisonView &&
+      currentStep === 6
+    ">
         Análisis Estratégico
+      </a>
 
-      </button>
-
-        <!-- Módulo de registro de patentes. -->
-      <button type="button" class="menu-item" [class.active]="currentStep === 7" (click)="goToStep(7)">
-
+      <!-- Módulo de patentes. -->
+      <a class="menu-item" routerLink="/institutional-information/nuevo" [queryParams]="{ step: 7 }" [class.active]="
+      !isComparisonView &&
+      currentStep === 7
+    ">
         Registro de Patentes
-
-      </button>
+      </a>
 
     </nav>
 
@@ -86,8 +94,13 @@
 
   <!-- Contenido del módulo seleccionado. -->
   <main class="content" [class.content-expanded]="menuCollapsed">
+  <!-- Comparación de registros institucionales. -->
+  <app-records-summary *ngIf="isComparisonView"> </app-records-summary>
 
-    <section class="form-wrapper">
+  <!-- Flujo de captura institucional. -->
+  <section
+    class="form-wrapper"
+    *ngIf="!isComparisonView">
 
       <!-- Encabezado y avance del flujo institucional. -->
       <div class="top-actions">
@@ -180,9 +193,7 @@
           </div>
 
           <!-- Paso 7: Registro de Patentes. -->
-          <div
-            class="step"
-            [class.active]="currentStep === 7">
+          <div class="step" [class.active]="currentStep === 7">
 
             <span>
               7
@@ -197,11 +208,7 @@
         </div>
 
         <!-- Guarda la información de la sección activa. -->
-                <button
-          *ngIf="currentStep !== 7"
-          class="btn-nav"
-          type="button"
-          [disabled]="
+        <button *ngIf="currentStep !== 7" class="btn-nav" type="button" [disabled]="
             isSaving ||
             (
               currentStep === 1 &&

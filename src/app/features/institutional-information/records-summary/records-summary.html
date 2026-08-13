@@ -1,334 +1,860 @@
-<!-- Encabezado del concentrado. -->
-<div class="summary-title">
-  <h2>Registro de Personal de la DGES</h2>
-  <p>Concentrado de los registros capturados</p>
-</div>
+<!-- Visualización histórica de información institucional. -->
+<div class="summary-page">
 
-<!-- Acciones principales. -->
-<div class="summary-actions">
+  <!-- Encabezado y acciones principales. -->
+  <div class="summary-header">
 
-  <a
-    class="btn-secondary"
-    routerLink="/home">
-    Inicio
-  </a>
+    <div class="summary-title">
+      <h2>Visualización de Registros Institucionales</h2>
 
-  <!-- Inicia el flujo de captura. -->
-  <a
-    class="btn-primary"
-    routerLink="/staff-registration/nuevo">
-    + Nuevo Registro
-  </a>
-
-</div>
-
-<!-- Notificación general. -->
-<div
-  *ngIf="notificationMessage()"
-  class="notification"
-  [class.success]="notificationType() === 'success'"
-  [class.error]="notificationType() === 'error'">
-
-  {{ notificationMessage() }}
-
-</div>
-
-<!-- Estado de carga. -->
-<div
-  *ngIf="isLoading()"
-  class="loading-state">
-
-  <p>Cargando registros...</p>
-
-</div>
-
-<!-- Mensaje cuando no existen registros. -->
-<div
-  *ngIf="!isLoading() && registros().length === 0"
-  class="empty-state">
-
-  <p>Aún no has capturado ningún registro.</p>
-
-  <a
-    class="btn-primary"
-    routerLink="/staff-registration/nuevo">
-    Comenzar un registro
-  </a>
-
-</div>
-
-<!-- Concentrado de registros. -->
-<div
-  *ngIf="!isLoading() && registros().length > 0"
-  class="table-container">
-
-  <table class="records-table">
-
-    <thead>
-      <tr>
-        <th>Nombre completo</th>
-        <th>CURP</th>
-        <th>Sexo</th>
-        <th>Institución</th>
-        <th>Tipo de personal</th>
-        <th>Tipo de contrato</th>
-        <th>Área</th>
-        <th>Fecha de ingreso</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let registro of registros()">
-
-        <td>{{ fullName(registro) }}</td>
-
-        <td>{{ registro.strCurp }}</td>
-
-        <td>{{ registro.strSexo }}</td>
-
-        <td>{{ registro.strInstitucion ?? '—' }}</td>
-
-        <td>{{ registro.strTipoPersonal ?? '—' }}</td>
-
-        <td>{{ registro.strTipoContrato ?? '—' }}</td>
-
-        <td>{{ registro.strArea ?? '—' }}</td>
-
-        <td>
-          {{
-            registro.dateFechaIngreso
-              ? (registro.dateFechaIngreso | date: 'dd/MM/yyyy')
-              : '—'
-          }}
-        </td>
-
-        <!--
-          Completo: empleado e historial de contrato guardados.
-          Incompleto: solo se guardó la información personal.
-        -->
-        <td>
-          <span
-            class="badge"
-            [class.badge-complete]="registro.bitContratoCompleto"
-            [class.badge-incomplete]="!registro.bitContratoCompleto">
-
-            {{
-              registro.bitContratoCompleto
-                ? 'Completo'
-                : 'Incompleto'
-            }}
-
-          </span>
-        </td>
-
-        <!-- Acciones disponibles para el registro. -->
-        <td class="actions-cell">
-
-          <a
-            *ngIf="!registro.bitContratoCompleto"
-            class="btn-continue"
-            [routerLink]="['/staff-registration/nuevo']"
-            [queryParams]="{ empleado: registro.idEmpleado }">
-            Continuar
-          </a>
-
-          <button
-            type="button"
-            class="btn-detalle"
-            (click)="openDetalle(registro)">
-            Detalle
-          </button>
-
-        </td>
-
-      </tr>
-    </tbody>
-
-  </table>
-
-</div>
-
-<!-- Modal del detalle del registro. -->
-<div
-  *ngIf="selectedRegistro() as registro"
-  class="modal-overlay"
-  (click)="closeDetalle()">
-
-  <div
-    class="modal-card"
-    (click)="$event.stopPropagation()">
-
-    <!-- Encabezado del modal. -->
-    <div class="modal-header">
-
-      <h3>Detalle del registro</h3>
-
-      <button
-        type="button"
-        class="btn-close"
-        aria-label="Cerrar detalle"
-        (click)="closeDetalle()">
-        ✕
-      </button>
-
+      <p>
+        Consulta y compara la información registrada
+        entre los periodos de tu institución.
+      </p>
     </div>
 
-    <!-- Información del empleado. -->
-    <div class="modal-body">
+    <div class="summary-actions">
 
-      <div class="detail-row">
-        <span class="detail-label">Nombre completo</span>
-        <span class="detail-value">
-          {{ fullName(registro) }}
-        </span>
-      </div>
-
-      <div class="detail-row">
-        <span class="detail-label">CURP</span>
-        <span class="detail-value">
-          {{ registro.strCurp }}
-        </span>
-      </div>
-
-      <div class="detail-row">
-        <span class="detail-label">Sexo</span>
-        <span class="detail-value">
-          {{ registro.strSexo }}
-        </span>
-      </div>
-
-      <div class="detail-row">
-        <span class="detail-label">Perfil(es) académico(s)</span>
-        <span class="detail-value">
-          {{ perfilesAcademicosTexto(registro) }}
-        </span>
-      </div>
-
-      <div class="detail-row">
-        <span class="detail-label">SNI/SNII</span>
-        <span class="detail-value">
-          {{ registro.strSNII ?? '—' }}
-        </span>
-      </div>
-
-      <div class="detail-row">
-        <span class="detail-label">Institución</span>
-        <span class="detail-value">
-          {{ registro.strInstitucion ?? '—' }}
-        </span>
-      </div>
-
-      <div class="detail-row">
-        <span class="detail-label">Tipo de personal</span>
-        <span class="detail-value">
-          {{ registro.strTipoPersonal ?? '—' }}
-        </span>
-      </div>
-
-      <div class="detail-row">
-        <span class="detail-label">Tipo de contrato</span>
-        <span class="detail-value">
-          {{ registro.strTipoContrato ?? '—' }}
-        </span>
-      </div>
-
-      <div class="detail-row">
-        <span class="detail-label">Área</span>
-        <span class="detail-value">
-          {{ registro.strArea ?? '—' }}
-        </span>
-      </div>
-
-      <div class="detail-row">
-        <span class="detail-label">Fecha de ingreso</span>
-        <span class="detail-value">
-          {{
-            registro.dateFechaIngreso
-              ? (registro.dateFechaIngreso | date: 'dd/MM/yyyy')
-              : '—'
-          }}
-        </span>
-      </div>
-
-      <!-- Imágenes registradas del empleado. -->
-      <div class="detail-images">
-
-        <!-- Fotografía del empleado. -->
-        <div class="detail-image-card">
-
-          <span class="detail-image-title">
-            Fotografía
-          </span>
-
-          <img
-            *ngIf="registro.strRutaFotografia; else sinFotografia"
-            class="detail-photo"
-            [src]="registro.strRutaFotografia"
-            alt="Fotografía del empleado"
-          />
-
-          <ng-template #sinFotografia>
-            <div class="detail-image-empty">
-              Imagen no disponible
-            </div>
-          </ng-template>
-
-        </div>
-
-        <!-- Identificación oficial del empleado. -->
-        <div class="detail-image-card">
-
-          <span class="detail-image-title">
-            INE
-          </span>
-
-          <img
-            *ngIf="registro.strRutaIne; else sinIne"
-            class="detail-ine"
-            [src]="registro.strRutaIne"
-            alt="INE del empleado"
-          />
-
-          <ng-template #sinIne>
-            <div class="detail-image-empty">
-              Imagen no disponible
-            </div>
-          </ng-template>
-
-        </div>
-
-      </div>
-
-      <!-- Estado del registro. -->
-      <div class="detail-row">
-
-        <span class="detail-label">
-          Estado
-        </span>
-
-        <span class="detail-value">
-
-          <span
-            class="badge"
-            [class.badge-complete]="registro.bitContratoCompleto"
-            [class.badge-incomplete]="!registro.bitContratoCompleto">
-
-            {{
-              registro.bitContratoCompleto
-                ? 'Completo'
-                : 'Incompleto'
-            }}
-
-          </span>
-
-        </span>
-
-      </div>
+      <a class="btn-secondary" routerLink="/home">
+        Inicio
+      </a>
 
     </div>
 
   </div>
+
+  <!-- Notificación general. -->
+  @if (notificationMessage()) {
+  <div class="notification" [class.success]="notificationType() === 'success'"
+    [class.error]="notificationType() === 'error'">
+
+    {{ notificationMessage() }}
+
+  </div>
+  }
+
+  <!-- Estado de carga. -->
+  @if (isLoading()) {
+  <div class="loading-state">
+    <p>Cargando periodos de la institución...</p>
+  </div>
+  }
+
+  <!-- Mensaje cuando no existen periodos asignados. -->
+  @if (!isLoading() && periodos().length === 0) {
+  <div class="empty-state">
+
+    <p>
+      La institución todavía no tiene periodos asignados.
+    </p>
+
+    <span>
+      Comunícate con el administrador para revisar
+      la asignación de periodos.
+    </span>
+
+  </div>
+  }
+
+  <!-- Configuración de la comparación. -->
+  @if (!isLoading() && periodos().length > 0) {
+  <section class="comparison-card">
+
+    <div class="comparison-header">
+      <h3>Configurar comparación</h3>
+
+      <p>
+        Selecciona el módulo y los dos periodos
+        que deseas consultar.
+      </p>
+    </div>
+
+    <div class="filters-grid">
+
+      <!-- Institución asociada al usuario. -->
+      <div class="filter-field institution-field">
+
+        <label for="institucion">
+          Institución
+        </label>
+
+        <input id="institucion" type="text" [value]="nombreInstitucion()" readonly />
+
+      </div>
+
+      <!-- Módulo institucional. -->
+      <div class="filter-field">
+
+        <label for="modulo">
+          Módulo
+        </label>
+
+        <select id="modulo" [ngModel]="moduloSeleccionado()" (ngModelChange)="onModuloChange($event)">
+
+          @for (modulo of modulos; track modulo.value) {
+          <option [ngValue]="modulo.value">
+            {{ modulo.label }}
+          </option>
+          }
+
+        </select>
+
+      </div>
+
+      <!-- Periodo principal. -->
+      <div class="filter-field">
+
+        <label for="periodoBase">
+          Periodo base
+        </label>
+
+        <select id="periodoBase" [ngModel]="periodoBaseId()" (ngModelChange)="onPeriodoBaseChange($event)">
+
+          <option [ngValue]="null" disabled>
+            Selecciona un periodo
+          </option>
+
+          @for (periodo of periodos(); track periodo.id) {
+          <option [ngValue]="periodo.id">
+            {{ periodoTexto(periodo) }}
+          </option>
+          }
+
+        </select>
+
+      </div>
+
+      <!-- Periodo utilizado para comparar. -->
+      <div class="filter-field">
+
+        <label for="periodoComparacion">
+          Comparar contra
+        </label>
+
+        <select id="periodoComparacion" [ngModel]="periodoComparacionId()" [disabled]="periodos().length < 2"
+          (ngModelChange)="onPeriodoComparacionChange($event)">
+
+          <option [ngValue]="null" disabled>
+            Selecciona otro periodo
+          </option>
+
+          @for (
+          periodo of periodosDisponiblesComparacion();
+          track periodo.id
+          ) {
+          <option [ngValue]="periodo.id">
+            {{ periodoTexto(periodo) }}
+          </option>
+          }
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <!-- Advertencia cuando solamente existe un periodo. -->
+    @if (periodos().length < 2) { <div class="period-warning">
+
+      Para realizar una comparación deben existir
+      al menos dos periodos asignados a la institución.
+
+</div>
+}
+
+<!-- Acción principal de la comparación. -->
+<div class="comparison-actions">
+  <button type="button" class="btn-compare" [disabled]="
+    !puedeComparar() ||
+    isComparing()
+  " (click)="comparePeriods()">
+
+    {{
+    isComparing()
+    ? 'Comparando...'
+    : 'Comparar periodos'
+    }}
+
+  </button>
+
+</div>
+
+</section>
+
+<!-- Resultado del módulo y los periodos seleccionados. -->
+@if (comparisonResult(); as result) {
+<section class="comparison-results">
+
+  <div class="results-header">
+
+    <div>
+      <h3>
+        Comparación de {{ nombreModuloComparativo() }}</h3>
+
+      <p>
+        Resultado obtenido a partir de los dos
+        periodos seleccionados.
+      </p>
+    </div>
+
+    <span class="status-badge" [class.increase]="result.estado === 'Aumentó'"
+      [class.decrease]="result.estado === 'Disminuyó'" [class.no-change]="result.estado === 'Sin cambios'">
+
+      {{ result.estado }}
+
+    </span>
+
+  </div>
+
+  <!-- Totales registrados en cada periodo. -->
+  <div class="period-results">
+
+    <article class="period-result-card">
+
+      <span class="period-label">
+        Periodo base
+      </span>
+
+      <h4>
+        {{ result.periodoActual }}
+      </h4>
+
+      <strong>
+        {{ result.matriculaActual }}
+      </strong>
+
+      <small>
+        Estudiantes registrados
+      </small>
+
+    </article>
+
+    <article class="period-result-card">
+
+      <span class="period-label">
+        Periodo de comparación
+      </span>
+
+      <h4>
+        {{ result.periodoAnterior }}
+      </h4>
+
+      <strong>
+        {{ result.matriculaAnterior }}
+      </strong>
+
+      <small>
+        {{ unidadComparativa() }}
+      </small>
+
+    </article>
+
+  </div>
+
+  <!-- Diferencias calculadas. -->
+  <div class="difference-grid">
+
+    <article class="difference-card">
+
+      <span>
+  {{ etiquetaDiferencia() }}
+</span>
+
+      <strong>
+        {{
+        result.diferencia > 0
+        ? '+' + result.diferencia
+        : result.diferencia
+        }}
+      </strong>
+
+    </article>
+
+    <article class="difference-card">
+
+      <span>
+        Cambio porcentual
+      </span>
+
+      <strong>
+        {{
+        result.porcentaje > 0
+        ? '+' + result.porcentaje
+        : result.porcentaje
+        }}%
+      </strong>
+    </article>
+
+    <article class="difference-card">
+
+      <span>
+        Resultado
+      </span>
+
+      <strong>
+        {{ result.estado }}
+      </strong>
+
+    </article>
+
+  </div>
+
+</section>
+}
+
+<!-- Comparativo de los indicadores de Infraestructura. -->
+@if (infrastructureComparisonResults().length > 0) {
+  <section class="comparison-results">
+
+    <div class="results-header">
+
+      <div>
+        <h3>
+          Comparación de Infraestructura
+        </h3>
+
+        <p>
+          Indicadores registrados en
+          {{ infrastructureComparisonResults()[0].periodoActual }}
+          y
+          {{ infrastructureComparisonResults()[0].periodoAnterior }}.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="indicators-table-wrapper">
+
+      <table class="indicators-table">
+
+        <thead>
+          <tr>
+            <th>Indicador</th>
+
+            <th>
+              Periodo base
+            </th>
+
+            <th>
+              Periodo de comparación
+            </th>
+
+            <th>Diferencia</th>
+            <th>Cambio</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (
+            result of infrastructureComparisonResults();
+            track result.indicador
+          ) {
+            <tr>
+
+              <td data-label="Indicador">
+                <strong>
+                  {{ result.indicador }}
+                </strong>
+              </td>
+
+              <td data-label="Periodo base">
+
+                <span class="table-period">
+                  {{ result.periodoActual }}
+                </span>
+
+                <strong class="table-value">
+                  {{ result.valorActual }}
+                </strong>
+
+              </td>
+
+              <td data-label="Periodo de comparación">
+
+                <span class="table-period">
+                  {{ result.periodoAnterior }}
+                </span>
+
+                <strong class="table-value">
+                  {{ result.valorAnterior ?? 0 }}
+                </strong>
+
+              </td>
+
+              <td data-label="Diferencia">
+
+                <strong>
+                  {{
+                    result.diferencia > 0
+                      ? '+' + result.diferencia
+                      : result.diferencia
+                  }}
+                </strong>
+
+              </td>
+
+              <td data-label="Cambio">
+
+                <strong>
+                  {{
+                    result.porcentaje > 0
+                      ? '+' + result.porcentaje
+                      : result.porcentaje
+                  }}%
+                </strong>
+
+              </td>
+
+              <td data-label="Resultado">
+
+                <span
+                  class="status-badge"
+                  [class.increase]="
+                    result.estado === 'Aumentó'
+                  "
+                  [class.decrease]="
+                    result.estado === 'Disminuyó'
+                  "
+                  [class.no-change]="
+                    result.estado === 'Sin cambios'
+                  ">
+
+                  {{ result.estado }}
+
+                </span>
+
+              </td>
+
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+}
+
+<!-- Comparativo de los indicadores financieros. -->
+@if (financeComparisonResults().length > 0) {
+  <section class="comparison-results">
+
+    <div class="results-header">
+
+      <div>
+        <h3>
+          Comparación de Finanzas
+        </h3>
+
+        <p>
+          Indicadores financieros registrados en
+          {{ financeComparisonResults()[0].periodoActual }}
+          y
+          {{ financeComparisonResults()[0].periodoAnterior }}.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="indicators-table-wrapper">
+
+      <table class="indicators-table">
+
+        <thead>
+          <tr>
+            <th>Indicador</th>
+            <th>Periodo base</th>
+            <th>Periodo de comparación</th>
+            <th>Diferencia</th>
+            <th>Cambio</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (
+            result of financeComparisonResults();
+            track result.indicador
+          ) {
+            <tr>
+
+              <td data-label="Indicador">
+                <strong>
+                  {{ result.indicador }}
+                </strong>
+              </td>
+
+              <td data-label="Periodo base">
+
+                <span class="table-period">
+                  {{ result.periodoActual }}
+                </span>
+
+                <strong class="table-value">
+                  {{
+                    result.valorActual
+                      | currency:'MXN':'symbol':'1.2-2'
+                  }}
+                </strong>
+
+              </td>
+
+              <td data-label="Periodo de comparación">
+
+                <span class="table-period">
+                  {{ result.periodoAnterior }}
+                </span>
+
+                <strong class="table-value">
+                  {{
+                    (result.valorAnterior ?? 0)
+                      | currency:'MXN':'symbol':'1.2-2'
+                  }}
+                </strong>
+
+              </td>
+
+              <td data-label="Diferencia">
+
+                <strong>
+                  {{
+                    result.diferencia > 0
+                      ? '+'
+                      : ''
+                  }}{{
+                    result.diferencia
+                      | currency:'MXN':'symbol':'1.2-2'
+                  }}
+                </strong>
+
+              </td>
+
+              <td data-label="Cambio">
+
+                <strong>
+                  {{
+                    result.porcentajeCambio > 0
+                      ? '+' + result.porcentajeCambio
+                      : result.porcentajeCambio
+                  }}%
+                </strong>
+
+              </td>
+
+              <td data-label="Resultado">
+
+                <span
+                  class="status-badge"
+                  [class.increase]="
+                    result.estado === 'Aumentó'
+                  "
+                  [class.decrease]="
+                    result.estado === 'Disminuyó'
+                  "
+                  [class.no-change]="
+                    result.estado === 'Sin cambios'
+                  ">
+
+                  {{ result.estado }}
+
+                </span>
+
+              </td>
+
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+}
+<!-- Comparativo de Vinculación y resultados. -->
+@if (vinculationComparisonResults().length > 0) {
+  <section class="comparison-results">
+
+    <div class="results-header">
+
+      <div>
+        <h3>
+          Comparación de Vinculación y resultados
+        </h3>
+
+        <p>
+          Indicadores registrados en
+          {{ vinculationComparisonResults()[0].periodoActual }}
+          y
+          {{ vinculationComparisonResults()[0].periodoAnterior }}.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="indicators-table-wrapper">
+
+      <table class="indicators-table">
+
+        <thead>
+          <tr>
+            <th>Indicador</th>
+            <th>Periodo base</th>
+            <th>Periodo de comparación</th>
+            <th>Diferencia</th>
+            <th>Cambio</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (
+            result of vinculationComparisonResults();
+            track result.indicador
+          ) {
+            <tr>
+
+              <td data-label="Indicador">
+                <strong>
+                  {{ result.indicador }}
+                </strong>
+              </td>
+
+              <td data-label="Periodo base">
+
+                <span class="table-period">
+                  {{ result.periodoActual }}
+                </span>
+
+                <strong class="table-value">
+                  {{ result.valorActual }}
+                </strong>
+
+              </td>
+
+              <td data-label="Periodo de comparación">
+
+                <span class="table-period">
+                  {{ result.periodoAnterior }}
+                </span>
+
+                <strong class="table-value">
+                  {{ result.valorAnterior ?? 0 }}
+                </strong>
+
+              </td>
+
+              <td data-label="Diferencia">
+
+                <strong>
+                  {{
+                    result.diferencia > 0
+                      ? '+' + result.diferencia
+                      : result.diferencia
+                  }}
+                </strong>
+
+              </td>
+
+              <td data-label="Cambio">
+
+                <strong>
+                  {{
+                    result.porcentajeCambio > 0
+                      ? '+' + result.porcentajeCambio
+                      : result.porcentajeCambio
+                  }}%
+                </strong>
+
+              </td>
+
+              <td data-label="Resultado">
+
+                <span
+                  class="status-badge"
+                  [class.increase]="
+                    result.estado === 'Aumentó'
+                  "
+                  [class.decrease]="
+                    result.estado === 'Disminuyó'
+                  "
+                  [class.no-change]="
+                    result.estado === 'Sin cambios'
+                  ">
+
+                  {{ result.estado }}
+
+                </span>
+
+              </td>
+
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+}
+
+<!-- Comparativo del total de patentes registradas. -->
+@if (patentComparisonResults().length > 0) {
+  <section class="comparison-results">
+
+    <div class="results-header">
+
+      <div>
+        <h3>
+          Comparación de Patentes
+        </h3>
+
+        <p>
+          Registros correspondientes a
+          {{ patentComparisonResults()[0].periodoActual }}
+          y
+          {{ patentComparisonResults()[0].periodoAnterior }}.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="indicators-table-wrapper">
+
+      <table class="indicators-table">
+
+        <thead>
+          <tr>
+            <th>Indicador</th>
+            <th>Periodo base</th>
+            <th>Periodo de comparación</th>
+            <th>Diferencia</th>
+            <th>Cambio</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (
+            result of patentComparisonResults();
+            track result.indicador
+          ) {
+            <tr>
+
+              <td data-label="Indicador">
+                <strong>
+                  {{ result.indicador }}
+                </strong>
+              </td>
+
+              <td data-label="Periodo base">
+
+                <span class="table-period">
+                  {{ result.periodoActual }}
+                </span>
+
+                <strong class="table-value">
+                  {{ result.valorActual }}
+                </strong>
+
+              </td>
+
+              <td data-label="Periodo de comparación">
+
+                <span class="table-period">
+                  {{ result.periodoAnterior }}
+                </span>
+
+                <strong class="table-value">
+                  {{ result.valorAnterior ?? 0 }}
+                </strong>
+
+              </td>
+
+              <td data-label="Diferencia">
+
+                <strong>
+                  {{
+                    result.diferencia > 0
+                      ? '+' + result.diferencia
+                      : result.diferencia
+                  }}
+                </strong>
+
+              </td>
+
+              <td data-label="Cambio">
+
+                <strong>
+                  {{
+                    result.porcentajeCambio > 0
+                      ? '+' + result.porcentajeCambio
+                      : result.porcentajeCambio
+                  }}%
+                </strong>
+
+              </td>
+
+              <td data-label="Resultado">
+
+                <span
+                  class="status-badge"
+                  [class.increase]="
+                    result.estado === 'Aumentó'
+                  "
+                  [class.decrease]="
+                    result.estado === 'Disminuyó'
+                  "
+                  [class.no-change]="
+                    result.estado === 'Sin cambios'
+                  ">
+
+                  {{ result.estado }}
+
+                </span>
+
+              </td>
+
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+}
+@if (
+  !comparisonResult() &&
+  infrastructureComparisonResults().length === 0 &&
+  financeComparisonResults().length === 0 &&
+  vinculationComparisonResults().length === 0 &&
+  patentComparisonResults().length === 0 &&
+  !isComparing()
+) {
+  <section class="results-placeholder">
+
+    <h3>Comparación de periodos</h3>
+
+    <p>
+      Selecciona el módulo y los periodos. Después,
+      presiona el botón para consultar los resultados.
+    </p>
+
+  </section>
+}
+}
 
 </div>

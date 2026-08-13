@@ -317,30 +317,73 @@
 </div>
 
   <!-- Resultado automático del comparativo con el periodo anterior. -->
-  <p
-    class="comparison-message"
-    *ngIf="isLoadingComparison">
+  <!-- Resumen de la información del periodo actual. -->
+<section class="current-period-summary">
 
-    Cargando comparativo...
+  <div class="summary-period-header">
 
-  </p>
+    <div>
+      <h3>Resumen del periodo actual</h3>
 
-  <p
-    class="comparison-message error"
-    *ngIf="comparisonError">
+      <p>
+        Indicadores registrados para
+        {{ periodo || 'el periodo seleccionado' }}.
+      </p>
+    </div>
 
-    {{ comparisonError }}
+    <span class="period-badge">
+      {{ periodo || 'Periodo actual' }}
+    </span>
 
-  </p>
+  </div>
 
-  <app-stat-card
-    *ngIf="!isLoadingComparison && !comparisonError"
-    [previousPeriod]="previousPeriod"
-    [currentPeriod]="currentPeriod || periodo || 'Periodo actual'"
-    [difference]="difference"
-    [percentage]="percentage"
-    [status]="comparisonStatus">
-  </app-stat-card>
+  <div class="summary-indicators-grid">
+
+    <article class="summary-indicator-card principal">
+
+      <span>Matrícula total</span>
+
+      <strong>
+        {{ matriculaTotal ?? 0 }}
+      </strong>
+
+      <small>Estudiantes registrados</small>
+
+    </article>
+
+    <article class="summary-indicator-card">
+
+      <span>Tasa de deserción</span>
+
+      <strong>
+        {{ tasaDesercion ?? 0 }}%
+      </strong>
+
+    </article>
+
+    <article class="summary-indicator-card">
+
+      <span>Tasa de reprobación</span>
+
+      <strong>
+        {{ tasaReprobacion ?? 0 }}%
+      </strong>
+
+    </article>
+
+    <article class="summary-indicator-card">
+
+      <span>Eficiencia terminal</span>
+
+      <strong>
+        {{ tasaEficienciaTerminal ?? 0 }}%
+      </strong>
+
+    </article>
+
+  </div>
+
+</section>
 
   <!-- Gráficas generadas con la información capturada. -->
 <div class="preview-grid charts-grid">

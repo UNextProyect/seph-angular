@@ -361,3 +361,116 @@
   font-weight: 600;
   line-height: 14px;
 }
+/*
+ * Resumen de los indicadores correspondientes
+ * al periodo activo.
+ */
+.current-period-summary {
+  margin-bottom: 24px;
+  padding: 22px;
+  border: 1px solid #e2d1d7;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.12);
+}
+
+.summary-period-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.summary-period-header h3 {
+  margin: 0;
+  color: #65122e;
+  font-size: 16px;
+}
+
+.summary-period-header p {
+  margin: 5px 0 0;
+  color: #666666;
+  font-size: 12px;
+}
+
+.period-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #f3e8ec;
+  color: #65122e;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/*
+ * Tarjetas con los principales resultados
+ * del periodo actual.
+ */
+.summary-indicators-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.summary-indicator-card {
+  min-height: 100px;
+  padding: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #ffffff;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.summary-indicator-card.principal {
+  border-color: #d7b8c3;
+  background: #faf5f7;
+}
+
+.summary-indicator-card span {
+  display: block;
+  margin-bottom: 10px;
+  color: #666666;
+  font-size: 11px;
+}
+
+.summary-indicator-card strong {
+  display: block;
+  color: #65122e;
+  font-size: 23px;
+}
+
+.summary-indicator-card small {
+  display: block;
+  margin-top: 5px;
+  color: #777777;
+  font-size: 10px;
+}
+
+/*
+ * Adaptación para tabletas y teléfonos.
+ */
+@media (max-width: 950px) {
+  .summary-indicators-grid {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .summary-period-header {
+    flex-direction: column;
+  }
+
+  .summary-indicators-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .period-badge {
+    white-space: normal;
+  }
+}

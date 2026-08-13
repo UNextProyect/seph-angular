@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BarChartComponent }
   from '../../../shared/ui/charts/bar-chart/bar-chart';
-import { StatCardComponent }
-  from '../../../shared/ui/charts/stat-card/stat-card';
 import { AuthService }
   from '../../../core/services/auth/authService';
 import { InstitutionalInformationService }
@@ -22,8 +20,7 @@ import { UpdateReporteMatriculaRequest }
   imports: [
     CommonModule,
     FormsModule,
-    BarChartComponent,
-    StatCardComponent
+    BarChartComponent
   ],
   templateUrl: './enrollment-data.html',
   styleUrl: './enrollment-data.scss'
@@ -129,17 +126,6 @@ get educationLevelTotalMatches(): boolean {
   periodo = '';
   fechaRegistro = '';
 
-  // Datos del comparativo obtenidos desde el backend.
-  previousPeriod: string | null = null;
-  currentPeriod = '';
-  difference = 0;
-  percentage = 0;
-  comparisonStatus = 'Sin periodo anterior';
-
-  // Estados de carga y error del comparativo.
-  isLoadingComparison = false;
-  comparisonError = '';
-
   /*
    * Al iniciar el componente consulta
    * el comparativo del periodo actual.
@@ -242,13 +228,13 @@ loadActivePeriod(): void {
     this.authService.currentUser()?.idInstitucion;
 
   if (!idInstitucion) {
-    this.comparisonError =
-      'El usuario no tiene una institución asignada.';
+    this.showSaveMessage(
+      'El usuario no tiene una institución asignada.',
+      'error'
+    );
+
     return;
   }
-
-  this.isLoadingComparison = true;
-  this.comparisonError = '';
 
   this.institutionalInformationService
     .getPeriodoActivo(idInstitucion)
@@ -257,9 +243,11 @@ loadActivePeriod(): void {
         const activePeriod = response.data;
 
         if (!activePeriod) {
-          this.comparisonError =
-            'No existe un periodo activo para la institución.';
-          this.isLoadingComparison = false;
+          this.showSaveMessage(
+            'No existe un periodo activo para la institución.',
+            'error'
+          );
+
           return;
         }
 
@@ -270,8 +258,6 @@ loadActivePeriod(): void {
           activePeriod.strPeriodo;
 
         this.loadReporteMatricula();
-
-        this.loadComparison();
       },
       error: (error: HttpErrorResponse) => {
         console.error(
@@ -279,10 +265,10 @@ loadActivePeriod(): void {
           error
         );
 
-        this.comparisonError =
-          'No se pudo obtener el periodo activo.';
-
-        this.isLoadingComparison = false;
+        this.showSaveMessage(
+          'No se pudo obtener el periodo activo.',
+          'error'
+        );
       }
     });
 }
@@ -546,7 +532,7 @@ this.institutionalInformationService
 
        // Vuelve a consultar los datos oficiales guardados.
       this.loadReporteMatricula();
-      this.loadComparison();
+    
 
       onSuccess?.();
     },
@@ -610,7 +596,7 @@ private updateEnrollmentData(
 
         // Recarga la información oficial guardada.
         this.loadReporteMatricula();
-        this.loadComparison();
+       
 
         onSuccess?.();
       },
@@ -646,66 +632,5 @@ private showSaveMessage(
     this.saveMessage = '';
   }, 4000);
 }
-  /*
-   * Consulta el comparativo de matrícula
-   * contra el periodo anterior.
-   */
-  loadComparison(): void {
-    if (!this.idMapInstitucionPeriodo) {
-      return;
-    }
 
-    this.isLoadingComparison = true;
-    this.comparisonError = '';
-
-    this.institutionalInformationService
-      .getReporteMatriculaComparativo(
-        this.idMapInstitucionPeriodo
-      )
-      .subscribe({
-        next: (response) => {
-          const comparison = response.data;
-
-          if (!comparison) {
-            this.comparisonError =
-              'No fue posible obtener el comparativo.';
-
-            this.isLoadingComparison = false;
-            return;
-          }
-
-          this.previousPeriod =
-            comparison.periodoAnterior;
-
-          this.currentPeriod =
-            comparison.periodoActual;
-
-          this.difference =
-            comparison.diferencia;
-
-          this.percentage =
-            comparison.porcentaje;
-
-          this.comparisonStatus =
-            comparison.estado;
-
-          // Muestra el periodo actual en el campo no editable.
-          this.periodo =
-            comparison.periodoActual;
-
-          this.isLoadingComparison = false;
-        },
-       error: (error: HttpErrorResponse) => {
-          console.error(
-            'Error consultando el comparativo de matrícula:',
-            error
-          );
-
-          this.comparisonError =
-            'No se pudo consultar el comparativo de matrícula.';
-
-          this.isLoadingComparison = false;
-        }
-      });
-  }
 }
