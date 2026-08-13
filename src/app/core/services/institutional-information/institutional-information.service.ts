@@ -173,16 +173,20 @@ updateReportePatente(
 }
 
 /*
- * Obtiene el comparativo del total
- * de patentes con el periodo anterior.
+ * Obtiene la comparación del total de patentes
+ * entre dos periodos seleccionados.
  */
 getReportePatenteComparativo(
-  idMapInstitucionPeriodo: number
+  idMapPeriodoBase: number,
+  idMapPeriodoComparacion: number
 ) {
   return this.http.get<
-    ApiResponse<ReportePatenteComparativoResponse>
+    ApiResponse<
+      ReportePatenteComparativoResponse[]
+    >
   >(
-    `${API_URL}/Patente/reporte-comparativo/${idMapInstitucionPeriodo}`
+    `${API_URL}/Patente/reporte-comparativo/` +
+    `${idMapPeriodoBase}/${idMapPeriodoComparacion}`
   );
 }
 
@@ -201,19 +205,20 @@ getReportePatenteEstadisticas(
 }
 
   /*
-   * Obtiene el comparativo del reporte de matrícula
-   * contra el periodo anterior de la misma institución.
-   */
-  
-  getReporteMatriculaComparativo(
-    idMapInstitucionPeriodo: number
-  ) {
-    return this.http.get<
-      ApiResponse<ReporteMatriculaComparativoResponse>
-    >(
-      `${API_URL}/Matricula/reporte-comparativo/${idMapInstitucionPeriodo}`
-    );
-  }
+ * Obtiene el comparativo de matrícula
+ * entre dos periodos seleccionados.
+ */
+getReporteMatriculaComparativo(
+  idMapPeriodoBase: number,
+  idMapPeriodoComparacion: number
+) {
+  return this.http.get<
+    ApiResponse<ReporteMatriculaComparativoResponse>
+  >(
+    `${API_URL}/Matricula/reporte-comparativo/` +
+    `${idMapPeriodoBase}/${idMapPeriodoComparacion}`
+  );
+}
   getPeriodoActivo(idInstitucion: number) {
   return this.http.get<
     ApiResponse<PeriodoActivoInstitucionResponse>
@@ -302,16 +307,18 @@ updateReportePersonal(
   );
 }
 /*
- * Obtiene el comparativo del reporte
- * de personal con el periodo anterior.
+ * Obtiene la comparación de Personal
+ * entre dos periodos seleccionados.
  */
 getReportePersonalComparativo(
-  idMapInstitucionPeriodo: number
+  idMapPeriodoBase: number,
+  idMapPeriodoComparacion: number
 ) {
   return this.http.get<
     ApiResponse<ReportePersonalComparativoResponse>
   >(
-    `${API_URL}/Personal/reporte-comparativo/${idMapInstitucionPeriodo}`
+    `${API_URL}/Personal/reporte-comparativo/` +
+    `${idMapPeriodoBase}/${idMapPeriodoComparacion}`
   );
 }
 /*
@@ -371,16 +378,20 @@ updateReporteInfraestructura(
 }
 
 /*
- * Obtiene el comparativo del reporte
- * de infraestructura con el periodo anterior.
+ * Obtiene la comparación de Infraestructura
+ * entre dos periodos seleccionados.
  */
 getReporteInfraestructuraComparativo(
-  idMapInstitucionPeriodo: number
+  idMapPeriodoBase: number,
+  idMapPeriodoComparacion: number
 ) {
   return this.http.get<
-    ApiResponse<ReporteInfraestructuraComparativoResponse[]>
+    ApiResponse<
+      ReporteInfraestructuraComparativoResponse[]
+    >
   >(
-    `${API_URL}/Infraestructura/reporte-comparativo/${idMapInstitucionPeriodo}`
+    `${API_URL}/Infraestructura/reporte-comparativo/` +
+    `${idMapPeriodoBase}/${idMapPeriodoComparacion}`
   );
 }
 
@@ -441,16 +452,20 @@ updateReporteVinculacion(
 }
 
 /*
- * Obtiene el comparativo del reporte
- * de vinculación con el periodo anterior.
+ * Obtiene la comparación de Vinculación
+ * entre dos periodos seleccionados.
  */
 getReporteVinculacionComparativo(
-  idMapInstitucionPeriodo: number
+  idMapPeriodoBase: number,
+  idMapPeriodoComparacion: number
 ) {
   return this.http.get<
-    ApiResponse<ReporteVinculacionComparativoResponse[]>
+    ApiResponse<
+      ReporteVinculacionComparativoResponse[]
+    >
   >(
-    `${API_URL}/Vinculacion/reporte-comparativo/${idMapInstitucionPeriodo}`
+    `${API_URL}/Vinculacion/reporte-comparativo/` +
+    `${idMapPeriodoBase}/${idMapPeriodoComparacion}`
   );
 }
 
@@ -511,16 +526,20 @@ updateReporteFinanza(
 }
 
 /*
- * Obtiene el comparativo del reporte
- * financiero con el periodo anterior.
+ * Obtiene la comparación de Finanzas
+ * entre dos periodos seleccionados.
  */
 getReporteFinanzaComparativo(
-  idMapInstitucionPeriodo: number
+  idMapPeriodoBase: number,
+  idMapPeriodoComparacion: number
 ) {
   return this.http.get<
-    ApiResponse<ReporteFinanzaComparativoResponse[]>
+    ApiResponse<
+      ReporteFinanzaComparativoResponse[]
+    >
   >(
-    `${API_URL}/Finanza/reporte-comparativo/${idMapInstitucionPeriodo}`
+    `${API_URL}/Finanza/reporte-comparativo/` +
+    `${idMapPeriodoBase}/${idMapPeriodoComparacion}`
   );
 }
 
@@ -547,6 +566,18 @@ getMapInstitucionPeriodos() {
     ApiResponse<MapInstitucionPeriodoResponse[]>
   >(
     `${API_URL}/MapInstitucionPeriodo`
+  );
+}
+
+/*
+ * Obtiene los periodos asignados
+ * a la institución del usuario autenticado.
+ */
+getMapInstitucionPeriodosUsuario() {
+  return this.http.get<
+    ApiResponse<MapInstitucionPeriodoResponse[]>
+  >(
+    `${API_URL}/MapInstitucionPeriodo/usuario`
   );
 }
 

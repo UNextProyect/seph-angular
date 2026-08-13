@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="558" height="447" viewBox="0 0 558 447" role="img" aria-labelledby="title desc">
+  <title id="title">Registro de matrículas</title>
+  <desc id="desc">Grupo de estudiantes y ficha de inscripción en colores vino, dorado, gris y negro.</desc>
+  <g stroke="#080808" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Arco dorado -->
+    <path d="M143 278C91 183 133 84 220 51c73-28 158 5 197 69 31 51 31 113 2 163" fill="none" stroke="#d7ad57" stroke-width="16"/>
+    <path d="M147 276C101 185 139 94 223 61c68-26 146 2 184 65 29 47 30 106 4 151" fill="none" stroke="#edc66f" stroke-width="5" opacity=".75"/>
+
+    <!-- Estudiante central -->
+    <circle cx="278" cy="169" r="42" fill="#696a66" stroke-width="8"/>
+    <path d="M207 306c3-58 28-90 71-90s68 32 71 90z" fill="#7f202b" stroke-width="9"/>
+    <path d="M238 145l40-25 41 25-41 21z" fill="#d7ad57" stroke-width="7"/>
+    <path d="M313 146v29" fill="none" stroke="#d7ad57" stroke-width="6"/>
+    <circle cx="313" cy="179" r="5" fill="#d7ad57" stroke-width="3"/>
+    <path d="M255 174c7 9 15 13 23 13s16-4 23-13" fill="none" stroke-width="5"/>
+
+    <!-- Estudiantes secundarios -->
+    <circle cx="185" cy="213" r="31" fill="#777873" stroke-width="7"/>
+    <path d="M132 306c3-42 21-66 53-66s50 24 53 66z" fill="#696a66" stroke-width="8"/>
+    <path d="M157 196l28-18 29 18-29 15z" fill="#d7ad57" stroke-width="6"/>
+    <circle cx="371" cy="213" r="31" fill="#777873" stroke-width="7"/>
+    <path d="M318 306c3-42 21-66 53-66s50 24 53 66z" fill="#696a66" stroke-width="8"/>
+    <path d="M343 196l28-18 29 18-29 15z" fill="#d7ad57" stroke-width="6"/>
+
+    <!-- Ficha de inscripción -->
+    <path d="M357 123h77c9 0 16 7 16 16v113c0 9-7 16-16 16h-77c-9 0-16-7-16-16V139c0-9 7-16 16-16z" fill="#f3eee3" stroke-width="8"/>
+    <path d="M374 151h59m-59 27h42m-42 27h59m-59 27h38" fill="none" stroke="#777873" stroke-width="8"/>
+    <circle cx="424" cy="232" r="24" fill="#d7ad57" stroke-width="6"/>
+    <path d="M424 219v26m-13-13h26" fill="none" stroke-width="7"/>
+    <rect x="375" y="112" width="40" height="22" rx="8" fill="#7f202b" stroke-width="7"/>
+
+    <!-- Insignia de conteo -->
+    <circle cx="145" cy="280" r="35" fill="#d7ad57" stroke-width="7"/>
+    <circle cx="145" cy="267" r="10" fill="#696a66" stroke-width="5"/>
+    <path d="M124 300c2-17 9-25 21-25s19 8 21 25" fill="#696a66" stroke-width="5"/>
+    <path d="M169 263h15m-15 17h15" fill="none" stroke-width="6"/>
+
+    <!-- Base tipo libro/cinta -->
+    <path d="M115 360c5-30 19-41 50-43 41-3 84 13 116 43 33-29 76-46 116-43 31 2 45 13 50 43-57-13-114-5-166 32-52-37-109-45-166-32z" fill="#7f202b" stroke-width="9"/>
+    <path d="M125 350c49-8 103 1 156 37 53-36 107-45 156-37" fill="none" stroke="#9b343d" stroke-width="8"/>
+  </g>
+</svg>

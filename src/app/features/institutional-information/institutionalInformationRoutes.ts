@@ -2,16 +2,28 @@ import { Routes } from '@angular/router';
 
 export const institutionalInformationRoutes: Routes = [
   {
-    /* Vista inicial del módulo: concentrado de registros institucionales. */
+    /*
+     * Visualización y comparación de
+     * los registros institucionales.
+     */
     path: '',
+    data: {
+      view: 'comparison'
+    },
     loadComponent: () =>
-      import('./records-summary/records-summary').then(
-        m => m.RecordsSummaryComponent
+      import('./institutional-information').then(
+        m => m.InstitutionalInformationComponent
       )
   },
   {
-    /* Flujo de captura: información institucional y reportes estadísticos. */
+    /*
+     * Flujo de captura de la
+     * información institucional.
+     */
     path: 'nuevo',
+    data: {
+      view: 'capture'
+    },
     loadComponent: () =>
       import('./institutional-information').then(
         m => m.InstitutionalInformationComponent

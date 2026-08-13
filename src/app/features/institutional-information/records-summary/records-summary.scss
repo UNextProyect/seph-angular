@@ -1,5 +1,6 @@
 /*
- * Contenedor principal del concentrado.
+ * Contenedor principal de la visualización
+ * de registros institucionales.
  */
 .summary-page {
   min-height: 370px;
@@ -8,6 +9,9 @@
   font-family: 'Noto Sans', Arial, sans-serif;
 }
 
+/*
+ * Encabezado y acciones principales.
+ */
 .summary-header {
   display: flex;
   align-items: flex-start;
@@ -18,14 +22,14 @@
 
 .summary-title h2 {
   margin: 0;
-  font-size: 18px;
   color: #65122e;
+  font-size: 18px;
 }
 
 .summary-title p {
   margin: 4px 0 0;
-  font-size: 12px;
   color: #555555;
+  font-size: 12px;
 }
 
 .summary-actions {
@@ -33,12 +37,12 @@
   gap: 10px;
 }
 
-.btn-primary,
+
 .btn-secondary {
   display: inline-flex;
+  height: 36px;
   align-items: center;
   justify-content: center;
-  height: 36px;
   padding: 0 22px;
   border-radius: 5px;
   font-size: 12px;
@@ -46,13 +50,6 @@
   text-decoration: none;
   cursor: pointer;
 }
-
-.btn-primary {
-  border: none;
-  background: #65122e;
-  color: #ffffff;
-}
-
 .btn-secondary {
   border: 1px solid #65122e;
   background: #ffffff;
@@ -60,7 +57,7 @@
 }
 
 /*
- * Notificaciones.
+ * Notificaciones generales.
  */
 .notification {
   margin-bottom: 16px;
@@ -82,276 +79,201 @@
 }
 
 /*
- * Estados de carga y sin registros.
+ * Estados de carga y ausencia de periodos.
  */
 .loading-state {
-  font-size: 12px;
+  padding: 20px 0;
   color: #555555;
+  font-size: 12px;
+}
+
+.loading-state p {
+  margin: 0;
 }
 
 .empty-state {
   padding: 50px 20px;
   border: 1px solid #dddddd;
   border-radius: 10px;
+  background: #ffffff;
   box-shadow: 0 3px 4px rgba(0, 0, 0, 0.25);
   text-align: center;
 }
 
 .empty-state p {
-  margin: 0 0 22px;
-  font-size: 13px;
+  margin: 0 0 8px;
   color: #65122e;
+  font-size: 13px;
+  font-weight: 600;
 }
 
-/*
- * Concentrado de registros.
- */
-.table-container {
-  overflow: auto;
-  border: 1px solid #dddddd;
-  border-radius: 10px;
-  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.25);
-}
-
-.records-table {
-  width: 100%;
-  border-collapse: collapse;
+.empty-state span {
+  color: #666666;
   font-size: 12px;
 }
 
-.records-table thead {
-  background: #65122e;
-  color: #ffffff;
-}
-
-.records-table th {
-  padding: 10px 12px;
-  text-align: left;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.records-table td {
-  padding: 9px 12px;
-  border-bottom: 1px solid #eeeeee;
-  color: #333333;
-  white-space: nowrap;
-}
-
-.records-table tbody tr:hover {
-  background: #faf5f7;
-}
-
 /*
- * Estados de los registros.
+ * Tarjeta para configurar la comparación.
  */
-.badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.badge-complete {
-  background: #23b64b;
-}
-
-.badge-incomplete {
-  background: #c00000;
-}
-
-/*
- * Acciones de la tabla.
- */
-.actions-cell {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-continue {
-  display: inline-block;
-  padding: 5px 14px;
-  border-radius: 5px;
-  background: #65122e;
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 600;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.btn-detalle {
-  display: inline-block;
-  padding: 5px 14px;
-  border: 1px solid #65122e;
-  border-radius: 5px;
-  background: #ffffff;
-  color: #65122e;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.action-done {
-  color: #999999;
-}
-
-/*
- * Modal del detalle.
- */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.45);
-}
-
-.modal-card {
-  width: 680px;
-  max-width: calc(100vw - 40px);
-  max-height: calc(100vh - 80px);
-  overflow-y: auto;
+.comparison-card {
+  padding: 24px;
+  border: 1px solid #d5d5d5;
   border-radius: 10px;
   background: #ffffff;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.18);
 }
 
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid #eeeeee;
-  border-radius: 10px 10px 0 0;
-  background: #65122e;
+.comparison-header {
+  margin-bottom: 22px;
 }
 
-.modal-header h3 {
+.comparison-header h3 {
+  margin: 0 0 4px;
+  color: #65122e;
+  font-size: 16px;
+}
+
+.comparison-header p {
   margin: 0;
-  font-size: 15px;
-  color: #ffffff;
+  color: #666666;
+  font-size: 11px;
 }
 
-.btn-close {
+/*
+ * Distribución de los filtros.
+ */
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 16px;
+}
+
+.institution-field {
+  grid-column: 1 / -1;
+}
+
+.filter-field {
+  min-width: 0;
+}
+
+.filter-field label {
+  display: block;
+  margin: 0 0 5px;
+  color: #222222;
+  font-size: 11px;
+}
+
+.filter-field input,
+.filter-field select {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #d5d5d5;
+  border-radius: 5px;
+  background: #ffffff;
+  box-sizing: border-box;
+  color: #222222;
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+}
+
+.filter-field input:focus,
+.filter-field select:focus {
+  border-color: #65122e;
+}
+
+.filter-field input[readonly] {
+  border-color: #dedede;
+  background: #eeeeee;
+  color: #666666;
+  cursor: default;
+}
+
+.filter-field select:disabled {
+  border-color: #dedede;
+  background: #eeeeee;
+  color: #666666;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/*
+ * Advertencia mostrada cuando no existen
+ * suficientes periodos para comparar.
+ */
+.period-warning {
+  margin-top: 18px;
+  padding: 9px 12px;
+  border: 1px solid #d7b46a;
+  border-radius: 6px;
+  background: #fff8e7;
+  color: #75591f;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/*
+ * Acción principal de la comparación.
+ */
+.comparison-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn-compare {
+  min-width: 160px;
+  height: 36px;
+  padding: 0 18px;
   border: none;
-  background: none;
+  border-radius: 5px;
+  background: #65122e;
   color: #ffffff;
-  font-size: 14px;
-  line-height: 1;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
 }
 
-.modal-body {
-  padding: 16px 20px 20px;
+.btn-compare:disabled {
+  background: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
 }
 
 /*
- * Información general del empleado.
+ * Contenedor donde posteriormente se mostrarán
+ * indicadores, diferencias y gráficas.
  */
-.detail-row {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 8px 0;
-  border-bottom: 1px solid #f2f2f2;
-}
-
-.detail-row:last-child {
-  border-bottom: none;
-}
-
-.detail-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: #999999;
-  text-transform: uppercase;
-}
-
-.detail-value {
-  font-size: 13px;
-  color: #333333;
-}
-
-/*
- * Fotografía e identificación del empleado.
- */
-.detail-images {
-  display: grid;
-  grid-template-columns: minmax(180px, 220px) minmax(280px, 1fr);
-  align-items: start;
-  gap: 18px;
-  padding: 18px 0;
-  border-bottom: 1px solid #f2f2f2;
-}
-
-.detail-image-card {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 14px;
+.results-placeholder {
+  margin-top: 24px;
+  padding: 24px;
   border: 1px solid #dddddd;
-  border-radius: 8px;
-  background: #fafafa;
+  border-radius: 10px;
+  background: #ffffff;
+  text-align: center;
 }
 
-.detail-image-title {
-  width: 100%;
-  font-size: 11px;
-  font-weight: 600;
+.results-placeholder h3 {
+  margin: 0 0 8px;
   color: #65122e;
-  text-align: center;
-  text-transform: uppercase;
+  font-size: 15px;
+}
+
+.results-placeholder p {
+  margin: 0;
+  color: #666666;
+  font-size: 12px;
 }
 
 /*
- * La fotografía se presenta en formato vertical.
+ * Adaptación para tabletas.
  */
-.detail-photo {
-  width: 150px;
-  height: 190px;
-  border: 1px solid #dddddd;
-  border-radius: 6px;
-  background: #ffffff;
-  object-fit: contain;
-}
-
-/*
- * El INE se presenta en formato horizontal.
- */
-.detail-ine {
-  width: 100%;
-  max-width: 320px;
-  height: 190px;
-  border: 1px solid #dddddd;
-  border-radius: 6px;
-  background: #ffffff;
-  object-fit: contain;
-}
-
-.detail-image-empty {
-  display: flex;
-  width: 100%;
-  min-height: 190px;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  border: 1px dashed #cccccc;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #999999;
-  font-size: 11px;
-  text-align: center;
-  box-sizing: border-box;
+@media (max-width: 900px) {
+  .filters-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /*
@@ -371,15 +293,439 @@
     flex-wrap: wrap;
   }
 
-  .detail-images {
+  .btn-secondary {
+    flex: 1;
+  }
+
+  .comparison-card {
+    padding: 20px;
+  }
+
+  .filters-grid {
     grid-template-columns: 1fr;
   }
 
-  .detail-photo {
-    width: 150px;
+  .institution-field {
+    grid-column: auto;
   }
 
-  .detail-ine {
-    max-width: 100%;
+  .comparison-actions {
+    justify-content: stretch;
+  }
+
+  .btn-compare {
+    width: 100%;
+  }
+}
+/*
+ * Configuración de la comparación.
+ */
+.comparison-card,
+.comparison-results,
+.results-placeholder {
+  padding: 24px;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15);
+}
+
+.comparison-header {
+  margin-bottom: 22px;
+}
+
+.comparison-header h3,
+.results-header h3,
+.results-placeholder h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #65122e;
+}
+
+.comparison-header p,
+.results-header p,
+.results-placeholder p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #555555;
+}
+
+/*
+ * Selectores de módulo y periodos.
+ */
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.filter-field input,
+.filter-field select {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #333333;
+  font-family: inherit;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+.filter-field input[readonly] {
+  background: #f5f5f5;
+  color: #666666;
+}
+
+.filter-field select:focus {
+  border-color: #65122e;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(101, 18, 46, 0.12);
+}
+
+.filter-field select:disabled {
+  background: #eeeeee;
+  color: #999999;
+  cursor: not-allowed;
+}
+
+.institution-field {
+  grid-column: 1 / -1;
+}
+
+/*
+ * Advertencia y acción principal.
+ */
+.period-warning {
+  margin-top: 18px;
+  padding: 10px 14px;
+  border: 1px solid #d6a629;
+  border-radius: 5px;
+  background: #fff8df;
+  color: #725600;
+  font-size: 12px;
+}
+
+.comparison-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 22px;
+}
+
+.btn-compare {
+  min-width: 160px;
+  height: 38px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 5px;
+  background: #65122e;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-compare:hover:not(:disabled) {
+  background: #4e0e24;
+}
+
+.btn-compare:disabled {
+  background: #b7b7b7;
+  cursor: not-allowed;
+}
+
+/*
+ * Resultado del comparativo.
+ */
+.comparison-results,
+.results-placeholder {
+  margin-top: 24px;
+}
+
+.results-placeholder {
+  text-align: center;
+}
+
+.results-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge.increase {
+  background: #e8f7ee;
+  color: #168a37;
+}
+
+.status-badge.decrease {
+  background: #fdeaea;
+  color: #c00000;
+}
+
+.status-badge.no-change {
+  background: #eeeeee;
+  color: #555555;
+}
+
+/*
+ * Totales de los periodos.
+ */
+.period-results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.period-result-card {
+  padding: 20px;
+  border: 1px solid #e2d1d7;
+  border-radius: 8px;
+  background: #faf5f7;
+  text-align: center;
+}
+
+.period-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #777777;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.period-result-card h4 {
+  margin: 0 0 12px;
+  color: #65122e;
+  font-size: 14px;
+}
+
+.period-result-card strong {
+  display: block;
+  color: #333333;
+  font-size: 26px;
+}
+
+.period-result-card small {
+  display: block;
+  margin-top: 4px;
+  color: #777777;
+  font-size: 11px;
+}
+
+/*
+ * Diferencia, porcentaje y estado.
+ */
+.difference-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.difference-card {
+  padding: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.difference-card span {
+  display: block;
+  margin-bottom: 7px;
+  color: #666666;
+  font-size: 11px;
+}
+
+.difference-card strong {
+  color: #65122e;
+  font-size: 18px;
+}
+
+/*
+ * Adaptación para pantallas pequeñas.
+ */
+@media (max-width: 720px) {
+  .summary-page {
+    padding: 25px 20px 40px;
+  }
+
+  .summary-header,
+  .results-header {
+    flex-direction: column;
+  }
+
+  .filters-grid,
+  .period-results,
+  .difference-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .institution-field {
+    grid-column: auto;
+  }
+
+  .comparison-actions {
+    justify-content: stretch;
+  }
+
+  .btn-compare {
+    width: 100%;
+  }
+}
+/*
+ * Tabla utilizada para mostrar los indicadores
+ * comparativos del módulo de Infraestructura.
+ */
+.infrastructure-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e2d1d7;
+  border-radius: 8px;
+}
+
+.infrastructure-table {
+  width: 100%;
+  min-width: 850px;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.infrastructure-table th,
+.infrastructure-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e8e8e8;
+  font-size: 11px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.infrastructure-table th {
+  background: #faf5f7;
+  color: #65122e;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.infrastructure-table th:first-child,
+.infrastructure-table td:first-child {
+  text-align: left;
+}
+
+.infrastructure-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.infrastructure-table tbody tr:hover {
+  background: #fdfafb;
+}
+
+/*
+ * Nombre del periodo y valor registrado
+ * dentro de cada celda.
+ */
+.table-period {
+  display: block;
+  margin-bottom: 5px;
+  color: #777777;
+  font-size: 10px;
+}
+
+.table-value {
+  display: block;
+  color: #65122e;
+  font-size: 17px;
+}
+
+/*
+ * Adaptación de la tabla para teléfonos.
+ * Cada fila se transforma en una tarjeta.
+ */
+@media (max-width: 720px) {
+  .infrastructure-table-wrapper {
+    overflow: visible;
+    border: none;
+  }
+
+  .infrastructure-table {
+    min-width: 0;
+    background: transparent;
+  }
+
+  .infrastructure-table thead {
+    display: none;
+  }
+
+  .infrastructure-table,
+  .infrastructure-table tbody,
+  .infrastructure-table tr,
+  .infrastructure-table td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .infrastructure-table tr {
+    margin-bottom: 16px;
+    border: 1px solid #e2d1d7;
+    border-radius: 8px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  .infrastructure-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 12px 14px;
+    text-align: right;
+  }
+
+  .infrastructure-table td:first-child {
+    background: #faf5f7;
+    color: #65122e;
+  }
+
+  .infrastructure-table td::before {
+    content: attr(data-label);
+    color: #666666;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .infrastructure-table td:first-child::before {
+    color: #65122e;
+  }
+
+  .table-period {
+    margin-bottom: 3px;
   }
 }

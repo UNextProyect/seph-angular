@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="558" height="447" viewBox="0 0 558 447" role="img" aria-labelledby="title desc">
+  <title id="title">Registro de infraestructura</title>
+  <desc id="desc">Edificio educativo con herramienta de mantenimiento en colores vino, dorado, gris y negro.</desc>
+  <g stroke="#080808" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Arco dorado -->
+    <path d="M143 278C91 183 133 84 220 51c73-28 158 5 197 69 31 51 31 113 2 163" fill="none" stroke="#d7ad57" stroke-width="16"/>
+    <path d="M147 276C101 185 139 94 223 61c68-26 146 2 184 65 29 47 30 106 4 151" fill="none" stroke="#edc66f" stroke-width="5" opacity=".75"/>
+
+    <!-- Edificio educativo -->
+    <path d="M176 157l103-67 103 67v24H176z" fill="#696a66" stroke-width="9"/>
+    <circle cx="279" cy="143" r="11" fill="#d7ad57" stroke-width="6"/>
+    <path d="M188 181h182v133H188z" fill="#7f202b" stroke-width="9"/>
+
+    <!-- Ventanas -->
+    <path d="M211 205h35v31h-35zm57 0h35v31h-35zm57 0h23v31h-23z" fill="#d7ad57" stroke-width="7"/>
+    <path d="M211 254h35v31h-35zm114 0h23v31h-23z" fill="#777873" stroke-width="7"/>
+
+    <!-- Entrada -->
+    <path d="M266 246h41v68h-41z" fill="#696a66" stroke-width="8"/>
+    <circle cx="297" cy="281" r="4" fill="#d7ad57" stroke-width="2"/>
+    <path d="M166 314h226l10 22H156z" fill="#777873" stroke-width="9"/>
+
+    <!-- Insignia sencilla de mantenimiento -->
+    <circle cx="390" cy="295" r="40" fill="#d7ad57" stroke-width="8"/>
+    <path d="M376 276c8-6 18-7 26-2l-14 14 9 9 14-14c5 9 3 20-4 27-7 7-18 9-27 4l-17 17-12-12 17-17c-5-9-2-19 8-26z" fill="#696a66" stroke-width="6"/>
+
+    <!-- Base tipo libro/cinta -->
+    <path d="M115 360c5-30 19-41 50-43 41-3 84 13 116 43 33-29 76-46 116-43 31 2 45 13 50 43-57-13-114-5-166 32-52-37-109-45-166-32z" fill="#7f202b" stroke-width="9"/>
+    <path d="M125 350c49-8 103 1 156 37 53-36 107-45 156-37" fill="none" stroke="#9b343d" stroke-width="8"/>
+  </g>
+</svg>
