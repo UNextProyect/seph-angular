@@ -88,14 +88,33 @@ Organiza la vista en: Menú lateral - Contenido del formulario -->
       - Acciones -->
       <div class="top-actions">
 
-        <button
-          class="btn-nav"
-          type="button"
-          (click)="previousStep()">
+       <!--
+  Desde Registro Personal regresa
+  al concentrado de registros.
+-->
+<button
+  class="btn-nav"
+  type="button"
+  routerLink="/staff-registration"
+  *ngIf="currentStep === 1">
 
-          Atrás
+  Atrás
 
-        </button>
+</button>
+
+<!--
+  Desde Historial de Contrato regresa
+  al paso de Información Personal.
+-->
+<button
+  class="btn-nav"
+  type="button"
+  (click)="previousStep()"
+  *ngIf="currentStep === 2">
+
+  Atrás
+
+</button>
 
         <!-- Indicador visual del avance. -->
         <div class="steps">
